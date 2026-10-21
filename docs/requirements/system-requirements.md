@@ -173,3 +173,114 @@ No MVP, a organização dos widgets será permitida, mas o redimensionamento liv
 | RF-063 | Tratamento dos dados na exclusão | O sistema deverá tratar os dados pessoais e os recursos coletivos associados à conta conforme as regras de negócio, as permissões existentes e as obrigações legais de retenção. | P0 |
 
 A exclusão da conta deverá considerar a propriedade de salas e comunidades, os dados compartilhados e a necessidade de transferência de propriedade quando aplicável. A exclusão não deverá conceder acesso indevido a dados privados nem apagar automaticamente dados de terceiros sem a devida avaliação.
+
+## 5. Requisitos não funcionais
+
+Os requisitos não funcionais definem os atributos de qualidade, desempenho, disponibilidade, compatibilidade e manutenção esperados para o Nook.
+
+### 5.1. Desempenho
+
+| ID | Requisito | Descrição |
+|---|---|---|
+| RNF-001 | Tempo de resposta | As operações comuns da interface deverão apresentar resposta rápida, evitando atrasos perceptíveis ao usuário. |
+| RNF-002 | Carregamento inicial | O sistema deverá priorizar o carregamento das informações necessárias para a utilização inicial do workspace. |
+| RNF-003 | Atualizações em tempo real | Eventos de presença e comunicação deverão ser transmitidos com baixa latência, considerando as condições de rede. |
+| RNF-004 | Uso de recursos | A aplicação deverá evitar consumo desnecessário de memória, processamento e largura de banda. |
+
+### 5.2. Disponibilidade e confiabilidade
+
+| ID | Requisito | Descrição |
+|---|---|---|
+| RNF-005 | Persistência confiável | Dados persistentes confirmados deverão permanecer armazenados após o encerramento da sessão. |
+| RNF-006 | Tratamento de falhas | Falhas de rede ou de serviços deverão ser tratadas sem provocar perda silenciosa de alterações confirmadas. |
+| RNF-007 | Recuperação de conexão | O sistema deverá permitir a recuperação da conexão e a retomada de atualizações quando tecnicamente possível. |
+| RNF-008 | Integridade dos dados | Operações de escrita deverão preservar a integridade e a consistência dos dados. |
+
+### 5.3. Usabilidade e acessibilidade
+
+| ID | Requisito | Descrição |
+|---|---|---|
+| RNF-009 | Interface intuitiva | A interface deverá apresentar organização visual consistente e fluxos de uso compreensíveis. |
+| RNF-010 | Responsividade | A interface deverá se adaptar a diferentes tamanhos de tela, com prioridade para computadores. |
+| RNF-011 | Feedback de ações | O sistema deverá informar estados de carregamento, sucesso, erro e confirmação de operações relevantes. |
+| RNF-012 | Prevenção de erros | A interface deverá reduzir erros de utilização, especialmente em ações destrutivas ou relacionadas a permissões. |
+
+### 5.4. Manutenibilidade e arquitetura
+
+| ID | Requisito | Descrição |
+|---|---|---|
+| RNF-013 | Modularidade | O código deverá ser organizado em módulos com responsabilidades bem definidas. |
+| RNF-014 | Legibilidade | O código deverá seguir convenções consistentes de nomenclatura, formatação e organização. |
+| RNF-015 | Testabilidade | Os componentes críticos deverão permitir testes automatizados. |
+| RNF-016 | Documentação | Decisões arquiteturais, configurações relevantes e procedimentos de desenvolvimento deverão ser documentados. |
+
+### 5.5. Compatibilidade e evolução
+
+| ID | Requisito | Descrição |
+|---|---|---|
+| RNF-017 | Compatibilidade com navegadores | A aplicação deverá funcionar nas versões atuais dos principais navegadores definidos para suporte. |
+| RNF-018 | Evolução do sistema | A arquitetura deverá permitir a inclusão de funcionalidades sem exigir a reescrita integral do sistema. |
+| RNF-019 | Configuração por ambiente | O sistema deverá separar as configurações de desenvolvimento, teste e produção, sem expor segredos no código-fonte. |
+
+## 6. Requisitos de segurança e privacidade
+
+Os requisitos de segurança deverão ser aplicados tanto na interface quanto no backend. A interface não deverá ser considerada uma barreira de segurança suficiente.
+
+### 6.1. Autenticação e sessões
+
+| ID | Requisito | Descrição |
+|---|---|---|
+| SEG-001 | Proteção de credenciais | Senhas deverão ser armazenadas utilizando algoritmo apropriado de hash de senhas, nunca em texto puro. |
+| SEG-002 | Autenticação segura | Os fluxos de autenticação deverão validar as credenciais e tratar falhas de maneira segura. |
+| SEG-003 | Proteção de sessões | Sessões deverão utilizar mecanismos seguros de criação, expiração e invalidação. |
+| SEG-004 | Encerramento de sessão | O logout deverá invalidar a sessão correspondente, conforme a estratégia de autenticação adotada. |
+| SEG-005 | Proteção de segredos | Tokens, chaves privadas, senhas e credenciais não poderão ser incluídos no repositório ou em logs. |
+
+### 6.2. Autorização e controle de acesso
+
+| ID | Requisito | Descrição |
+|---|---|---|
+| SEG-006 | Autorização no backend | Toda operação protegida deverá validar as permissões no backend. |
+| SEG-007 | Privilégio mínimo | Cada usuário, serviço ou integração deverá possuir somente as permissões necessárias para sua função. |
+| SEG-008 | Isolamento de workspaces | Usuários não autorizados não poderão acessar dados de workspaces pessoais. |
+| SEG-009 | Permissões explícitas | Ações de convidados deverão ser limitadas às permissões concedidas pelo proprietário. |
+| SEG-010 | Revogação efetiva | Permissões revogadas ou expiradas não poderão continuar autorizando novas operações, inclusive por conexões ativas. |
+| SEG-011 | Separação de papéis | Papéis administrativos de salas e comunidades não concederão acesso irrestrito aos dados pessoais de outros usuários. |
+
+### 6.3. Compartilhamento e convites
+
+| ID | Requisito | Descrição |
+|---|---|---|
+| SEG-012 | Compartilhamento privado por padrão | Workspaces pessoais deverão permanecer privados até que o proprietário autorize o compartilhamento. |
+| SEG-013 | Expiração de compartilhamentos | A duração dos acessos temporários deverá ser limitada e validada pelo backend. |
+| SEG-014 | Proteção de convites | Tokens de convite deverão ser gerados de forma segura e armazenados como hashes quando aplicável. |
+| SEG-015 | Limitação de convites | Convites deverão respeitar limites de validade e utilização definidos nas regras de negócio. |
+| SEG-016 | Revogação de convites | Convites revogados ou expirados não poderão conceder acesso. |
+
+### 6.4. Privacidade e dados pessoais
+
+| ID | Requisito | Descrição |
+|---|---|---|
+| SEG-017 | Minimização de dados | O sistema deverá coletar e processar somente os dados necessários às suas funcionalidades. |
+| SEG-018 | Proteção de dados em trânsito | Comunicações externas deverão utilizar protocolos seguros de transporte, como HTTPS/TLS. |
+| SEG-019 | Proteção de dados armazenados | O armazenamento deverá adotar controles de acesso e medidas de proteção proporcionais à sensibilidade dos dados. |
+| SEG-020 | Exclusão de dados | A exclusão de conta deverá seguir as regras definidas para dados pessoais, recursos coletivos e retenção legal. |
+| SEG-021 | Minimização de logs | Logs não deverão expor senhas, tokens, conteúdo privado ou outros dados sensíveis desnecessários. |
+
+### 6.5. Presença, chamadas e compartilhamento de tela
+
+| ID | Requisito | Descrição |
+|---|---|---|
+| SEG-022 | Proteção do modo invisível | O modo invisível não deverá revelar a presença do usuário em listas públicas, buscas ou indicadores indevidos de última atividade. |
+| SEG-023 | Autorização de chamadas | O acesso às chamadas deverá ser restrito aos participantes autorizados. |
+| SEG-024 | Consentimento para compartilhamento | O compartilhamento de tela deverá depender de ação explícita do usuário e apresentar indicador visível durante a atividade. |
+| SEG-025 | Interrupção do compartilhamento | O usuário deverá conseguir encerrar o compartilhamento de tela imediatamente pela interface. |
+
+### 6.6. Auditoria e proteção contra abuso
+
+| ID | Requisito | Descrição |
+|---|---|---|
+| SEG-026 | Registro de eventos relevantes | O sistema deverá registrar eventos de segurança e ações administrativas relevantes, respeitando a minimização de dados. |
+| SEG-027 | Proteção contra abuso | Operações sensíveis, autenticação, convites e ações sujeitas a abuso deverão contar com validações e limites apropriados. |
+
+Os registros de auditoria deverão ter acesso restrito e não poderão funcionar como mecanismo de exposição de conteúdo privado. A retenção deverá ser definida conforme a necessidade operacional e as obrigações aplicáveis.
