@@ -97,3 +97,79 @@ No MVP, a organização dos widgets será permitida, mas o redimensionamento liv
 | RF-022 | Remoção de widgets | O usuário poderá remover widgets do workspace sem afetar os dados de outros espaços. | P0 |
 | RF-023 | Salvamento dos dados | As informações persistentes dos widgets deverão ser salvas na nuvem. | P0 |
 | RF-024 | Sincronização | As alterações deverão ser sincronizadas entre sessões e dispositivos compatíveis. | P0 |
+
+### 4.4. Compartilhamento temporário de workspaces
+
+| ID | Requisito | Descrição | Prioridade |
+|---|---|---|---|
+| RF-025 | Compartilhamento temporário | O proprietário poderá compartilhar um workspace com usuários autorizados por tempo limitado. | P0 |
+| RF-026 | Definição de permissões | O proprietário poderá definir quais ações o convidado poderá executar. | P0 |
+| RF-027 | Expiração do acesso | O compartilhamento deverá expirar automaticamente ao atingir o prazo definido. | P0 |
+| RF-028 | Revogação de acesso | O proprietário poderá revogar o compartilhamento a qualquer momento. | P0 |
+| RF-029 | Aplicação imediata da revogação | A revogação deverá impedir novas operações protegidas, inclusive em sessões ativas. | P0 |
+| RF-030 | Proteção dos dados do proprietário | O convidado não poderá editar notas, tarefas, widgets ou configurações sem permissão explícita. | P0 |
+| RF-031 | Limite de compartilhamento | O compartilhamento temporário deverá respeitar o limite máximo de duração definido nas regras de negócio. | P0 |
+
+### 4.5. Salas privadas
+
+| ID | Requisito | Descrição | Prioridade |
+|---|---|---|---|
+| RF-032 | Criação de sala privada | O usuário poderá criar salas privadas para interação em grupo. | P0 |
+| RF-033 | Convite de participantes | O proprietário ou usuário autorizado poderá convidar pessoas para uma sala. | P0 |
+| RF-034 | Controle de membros | Usuários autorizados poderão gerenciar a participação na sala conforme suas permissões. | P0 |
+| RF-035 | Persistência da sala | A sala continuará existindo mesmo quando seu proprietário estiver offline. | P0 |
+| RF-036 | Controle de propriedade | A ausência do proprietário não transferirá automaticamente a propriedade da sala. | P0 |
+| RF-037 | Restrição de acesso | Somente membros autorizados poderão acessar o conteúdo e os recursos privados da sala. | P0 |
+
+### 4.6. Comunidades públicas
+
+| ID | Requisito | Descrição | Prioridade |
+|---|---|---|---|
+| RF-038 | Criação de comunidade | O usuário poderá criar uma comunidade pública conforme as regras da plataforma. | P0 |
+| RF-039 | Descoberta de comunidades | O sistema permitirá localizar comunidades públicas disponíveis para participação. | P0 |
+| RF-040 | Entrada em comunidade | A comunidade poderá permitir entrada aberta ou exigir aprovação. | P0 |
+| RF-041 | Solicitação de entrada | Quando necessário, o usuário poderá solicitar acesso a uma comunidade. | P0 |
+| RF-042 | Papéis de comunidade | O sistema deverá oferecer papéis de proprietário, administrador, moderador e membro. | P0 |
+| RF-043 | Moderação | Usuários autorizados poderão aplicar ações de moderação dentro de suas permissões. | P0 |
+| RF-044 | Denúncias | O usuário poderá denunciar conteúdos ou comportamentos inadequados. | P0 |
+| RF-045 | Bloqueio de usuários | O sistema deverá permitir bloquear usuários conforme as regras da plataforma. | P0 |
+| RF-046 | Proteção de dados pessoais | Os papéis administrativos de uma comunidade não concederão acesso automático aos dados privados dos workspaces pessoais. | P0 |
+
+### 4.7. Presença e interação social
+
+| ID | Requisito | Descrição | Prioridade |
+|---|---|---|---|
+| RF-047 | Status de presença | O usuário poderá definir seu status como Disponível, Foco, Ausente, Ocupado ou Invisível. | P0 |
+| RF-048 | Atualização de presença | O sistema deverá atualizar a presença conforme as alterações do usuário e os eventos de conexão pertinentes. | P0 |
+| RF-049 | Exibição de presença | A presença será exibida somente nos contextos autorizados pelas regras de privacidade. | P0 |
+| RF-050 | Modo invisível | O usuário poderá utilizar o Nook sem aparecer como disponível nas listas públicas de presença. | P0 |
+| RF-051 | Proteção contra exposição indireta | O modo invisível deverá evitar exposição indevida por listas públicas, buscas ou informações de última atividade. | P0 |
+
+### 4.8. Chamadas de voz e compartilhamento de tela
+
+| ID | Requisito | Descrição | Prioridade |
+|---|---|---|---|
+| RF-052 | Chamadas de voz | O sistema deverá permitir chamadas de voz entre usuários autorizados. | P0 |
+| RF-053 | Compartilhamento de tela | O usuário poderá compartilhar sua tela mediante ação explícita. | P0 |
+| RF-054 | Autorização de comunicação | O início e a participação em chamadas deverão respeitar as permissões e o contexto de acesso. | P0 |
+| RF-055 | Indicador de compartilhamento | A interface deverá informar claramente quando a tela estiver sendo compartilhada. | P0 |
+| RF-056 | Interrupção do compartilhamento | O usuário poderá interromper o compartilhamento de tela imediatamente. | P0 |
+| RF-057 | Ausência de gravação | O MVP não oferecerá gravação de chamadas ou compartilhamentos. | P0 |
+
+### 4.9. Integração com GitHub
+
+| ID | Requisito | Descrição | Prioridade |
+|---|---|---|---|
+| RF-058 | Conexão com GitHub | O usuário poderá conectar sua conta GitHub por meio do fluxo de autorização disponibilizado. | P1 |
+| RF-059 | Escopo limitado | A integração deverá solicitar somente as permissões necessárias às funcionalidades implementadas. | P0 |
+| RF-060 | Desconexão da integração | O usuário poderá desconectar sua conta GitHub do Nook. | P1 |
+
+### 4.10. Conta e dados pessoais
+
+| ID | Requisito | Descrição | Prioridade |
+|---|---|---|---|
+| RF-061 | Configurações da conta | O usuário poderá consultar e alterar as configurações de conta disponibilizadas. | P0 |
+| RF-062 | Exclusão de conta | O sistema deverá oferecer um fluxo de exclusão de conta com confirmação da ação. | P0 |
+| RF-063 | Tratamento dos dados na exclusão | O sistema deverá tratar os dados pessoais e os recursos coletivos associados à conta conforme as regras de negócio, as permissões existentes e as obrigações legais de retenção. | P0 |
+
+A exclusão da conta deverá considerar a propriedade de salas e comunidades, os dados compartilhados e a necessidade de transferência de propriedade quando aplicável. A exclusão não deverá conceder acesso indevido a dados privados nem apagar automaticamente dados de terceiros sem a devida avaliação.
