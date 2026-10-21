@@ -1,0 +1,18 @@
+<escape>{
+  "name": "nook",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A collaborative digital workspace for developers, productivity, and communities.",
+  "packageManager": "pnpm@10.18.3",
+  "scripts": {
+    "dev": "pnpm --parallel --filter './apps/*' dev",
+    "build": "pnpm --recursive --if-present build",
+    "lint": "pnpm --recursive --if-present lint",
+    "typecheck": "pnpm --recursive --if-present typecheck",
+    "test": "pnpm --recursive --if-present test"
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=10"
+  }
+}</escape>
