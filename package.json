@@ -1,4 +1,5 @@
-<escape>{
+
+{
   "name": "nook",
   "version": "0.1.0",
   "private": true,
@@ -15,4 +16,4 @@
     "node": ">=22",
     "pnpm": ">=10"
   }
-}</escape>
+}
