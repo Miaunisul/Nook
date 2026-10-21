@@ -284,3 +284,110 @@ Os requisitos de segurança deverão ser aplicados tanto na interface quanto no 
 | SEG-027 | Proteção contra abuso | Operações sensíveis, autenticação, convites e ações sujeitas a abuso deverão contar com validações e limites apropriados. |
 
 Os registros de auditoria deverão ter acesso restrito e não poderão funcionar como mecanismo de exposição de conteúdo privado. A retenção deverá ser definida conforme a necessidade operacional e as obrigações aplicáveis.
+
+## 7. Critérios de aceitação
+
+Os critérios de aceitação definem condições verificáveis para confirmar se os principais comportamentos do sistema foram implementados corretamente.
+
+### 7.1. Cadastro e autenticação
+
+| ID | Critério de aceitação |
+|---|---|
+| CA-001 | Um usuário consegue criar uma conta válida e acessar o sistema após cumprir as etapas de validação exigidas. |
+| CA-002 | O sistema rejeita credenciais inválidas sem revelar informações sensíveis sobre a conta. |
+| CA-003 | O fluxo de recuperação de acesso permite recuperar a conta de maneira segura. |
+| CA-004 | Uma sessão encerrada ou revogada não consegue executar operações protegidas. |
+
+### 7.2. Workspaces e widgets
+
+| ID | Critério de aceitação |
+|---|---|
+| CA-005 | Um usuário consegue criar mais de um workspace pessoal, mantendo seus dados separados. |
+| CA-006 | Um workspace recém-criado permanece privado até que o proprietário autorize seu compartilhamento. |
+| CA-007 | O usuário consegue adicionar, remover e reorganizar widgets disponíveis. |
+| CA-008 | Notas, tarefas, atalhos e configurações persistentes permanecem salvos após sair e entrar novamente. |
+| CA-009 | A exclusão de um workspace exige confirmação quando aplicável e não apaga dados pertencentes a outros workspaces. |
+
+### 7.3. Compartilhamento e salas privadas
+
+| ID | Critério de aceitação |
+|---|---|
+| CA-010 | O proprietário consegue conceder permissões específicas a um convidado. |
+| CA-011 | Um convidado não consegue executar ações que não foram autorizadas. |
+| CA-012 | Um compartilhamento expirado ou revogado deixa de autorizar operações protegidas. |
+| CA-013 | A revogação de acesso é aplicada também a sessões e conexões ativas, sem depender apenas da atualização da interface. |
+| CA-014 | Uma sala privada permanece disponível conforme suas regras mesmo quando o proprietário está offline. |
+| CA-015 | Somente usuários autorizados conseguem acessar uma sala privada. |
+
+### 7.4. Comunidades e moderação
+
+| ID | Critério de aceitação |
+|---|---|
+| CA-016 | Uma comunidade pode ser configurada para entrada aberta ou sujeita à aprovação. |
+| CA-017 | Os papéis de proprietário, administrador, moderador e membro respeitam suas permissões específicas. |
+| CA-018 | Um usuário consegue enviar uma denúncia e as ações de moderação respeitam as permissões do responsável. |
+| CA-019 | A administração de uma comunidade não concede acesso automático aos workspaces pessoais dos membros. |
+
+### 7.5. Presença e comunicação
+
+| ID | Critério de aceitação |
+|---|---|
+| CA-020 | O usuário consegue alterar seu status de presença entre as opções disponíveis. |
+| CA-021 | O modo invisível impede a exposição indevida da presença em listas públicas e indicadores não autorizados. |
+| CA-022 | Somente participantes autorizados conseguem entrar em chamadas de voz. |
+| CA-023 | O compartilhamento de tela depende de ação explícita, apresenta indicador visível e pode ser interrompido pelo usuário. |
+| CA-024 | O MVP não disponibiliza gravação de chamadas ou compartilhamentos de tela. |
+
+### 7.6. Integração e conta
+
+| ID | Critério de aceitação |
+|---|---|
+| CA-025 | A integração com GitHub solicita somente os escopos necessários às funcionalidades implementadas e pode ser desconectada pelo usuário. |
+| CA-026 | A exclusão de conta segue as regras de tratamento de dados pessoais e de recursos coletivos, sem conceder acesso indevido a terceiros. |
+| CA-027 | As operações protegidas são validadas no backend, e os testes confirmam que usuários sem autorização não conseguem contornar as restrições pela interface ou por requisições diretas. |
+
+## 8. Definição de concluído
+
+Uma funcionalidade será considerada concluída quando:
+
+- [ ] Atender aos requisitos funcionais e às regras de negócio correspondentes.
+- [ ] Implementar autorização e validação no backend quando necessárias.
+- [ ] Apresentar estados de carregamento, sucesso e erro adequados.
+- [ ] Possuir testes compatíveis com seu nível de risco e complexidade.
+- [ ] Não expor segredos ou dados privados em respostas, logs ou arquivos do repositório.
+- [ ] Manter a documentação relevante atualizada.
+- [ ] Ter sido revisada e validada em ambiente de desenvolvimento ou teste.
+- [ ] Não apresentar falhas críticas conhecidas que impeçam seu uso seguro.
+
+## 9. Relação com os demais documentos
+
+Este documento deve ser utilizado em conjunto com:
+
+- **Regras de Negócio:** define limites, permissões e comportamentos obrigatórios.
+- **Mapeamento dos Fluxos de Uso:** descreve a sequência de interação entre usuários e sistema.
+- **Diagramas do Sistema:** representa visualmente os fluxos, componentes e interações.
+- **Arquitetura do Sistema:** define a organização técnica e as tecnologias adotadas.
+- **Modelagem do Banco de Dados:** descreve a estrutura de persistência e os relacionamentos entre entidades.
+- **Plano de Implementação do MVP:** organiza as etapas de desenvolvimento.
+
+Se houver conflito entre documentos, a divergência deverá ser identificada e resolvida antes da implementação da funcionalidade afetada. Alterações relevantes deverão ser refletidas nos documentos relacionados.
+
+## 10. Controle de alterações
+
+| Versão | Data | Descrição |
+|---|---|---|
+| 1.0 | Outubro de 2026 | Consolidação inicial dos requisitos funcionais, não funcionais, de segurança e critérios de aceitação. |
+
+## 11. Observações para implementação
+
+Os requisitos deste documento orientam o desenvolvimento do MVP, mas não substituem a validação técnica, os testes de segurança ou a análise jurídica necessária antes do lançamento.
+
+Pontos que dependem de validação durante a implementação incluem:
+
+- Estratégia definitiva de autenticação e gerenciamento de sessões.
+- Metas quantitativas de desempenho e disponibilidade.
+- Estratégia de infraestrutura para chamadas de voz e compartilhamento de tela.
+- Política final de retenção, exportação e exclusão de dados.
+- Requisitos legais e operacionais aplicáveis à idade mínima e à utilização da plataforma.
+
+Esses pontos deverão ser resolvidos e documentados antes de afetarem funcionalidades críticas ou o lançamento público.
