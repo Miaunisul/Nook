@@ -6,7 +6,7 @@
   "description": "A collaborative digital workspace for developers, productivity, and communities.",
   "packageManager": "pnpm@10.18.3",
   "scripts": {
-    "dev": "pnpm --parallel --filter './apps/*' dev",
+    "dev": "pnpm --parallel --filter @nook/web dev",
     "build": "pnpm --recursive --if-present build",
     "lint": "pnpm --recursive --if-present lint",
     "typecheck": "pnpm --recursive --if-present typecheck",
