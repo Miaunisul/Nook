@@ -475,29 +475,35 @@ a {
 /* Pomodoro */
 .pomodoro {
   display: grid;
-  gap: 20px;
+  gap: 22px;
   margin-top: 24px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(48, 45, 40, 0.65);
 }
 
 .pomodoro-timer {
   color: var(--text);
-  font-size: clamp(36px, 4vw, 48px);
+  font-size: clamp(44px, 5vw, 58px);
   font-weight: 700;
-  letter-spacing: -2px;
+  letter-spacing: -2.5px;
   font-variant-numeric: tabular-nums;
-  line-height: 1.1;
+  line-height: 1;
+  padding: 8px 0;
 }
 
 .pomodoro-controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 9px;
+  align-items: center;
+  gap: 10px;
 }
 
 .pomodoro-controls button {
-  padding: 10px 15px;
+  padding: 11px 17px;
   border: 1px solid transparent;
-  border-radius: 9px;
+  border-radius: 10px;
   background: var(--accent);
   color: var(--background);
   font-size: 12px;
@@ -505,12 +511,23 @@ a {
   cursor: pointer;
   transition:
     background 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
     transform 180ms ease;
 }
 
 .pomodoro-controls button:hover {
   background: var(--highlight);
   transform: translateY(-1px);
+}
+
+.pomodoro-controls button:active {
+  transform: translateY(0);
+}
+
+.pomodoro-controls button:focus-visible {
+  outline: 2px solid var(--highlight);
+  outline-offset: 3px;
 }
 
 .pomodoro-controls .pomodoro-reset {
