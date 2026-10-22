@@ -1,3 +1,4 @@
+import { useState } from 'react';
 
 const widgets = [
   {
@@ -23,6 +24,17 @@ const widgets = [
 ];
 
 function App() {
+
+  const [nota, setNota] = useState('');
+  const [notas, setNotas] = useState<string[]>([]);
+  function adicionarNota() {
+    const texto = nota.trim();
+
+    if (!texto) return;
+
+    setNotas((atuais) => [texto, ...atuais]);
+    setNota('');
+  }
   return (
     <main className="app-shell">
       <aside className="sidebar">
