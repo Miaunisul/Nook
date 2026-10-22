@@ -523,3 +523,99 @@ a {
   border-color: var(--accent);
   background: #383128;
 }
+
+
+.task-item {
+  padding: 8px 0;
+}
+
+.task-item-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.task-item-main label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.task-item-main label span {
+  overflow-wrap: anywhere;
+}
+
+.task-delete-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  padding: 7px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: #a9a196;
+  cursor: pointer;
+  opacity: 0.7;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.task-delete-button svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.task-delete-button:hover {
+  background: rgba(242, 166, 90, 0.12);
+  color: #f2a65a;
+  opacity: 1;
+}
+
+.task-delete-confirmation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 8px 0 4px 28px;
+  padding: 10px 12px;
+  border: 1px solid #51453a;
+  border-radius: 10px;
+  background: #26231f;
+  color: #f3efe7;
+  font-size: 12px;
+}
+
+.task-delete-confirmation > div {
+  display: flex;
+  gap: 8px;
+}
+
+.task-delete-confirmation button {
+  padding: 6px 10px;
+  border: 1px solid #51453a;
+  border-radius: 7px;
+  background: #302d28;
+  color: #f3efe7;
+  cursor: pointer;
+}
+
+.task-delete-confirmation button:last-child {
+  border-color: #f2a65a;
+  background: #f2a65a;
+  color: #201f1c;
+}
+
+.task-empty {
+  color: #a9a196;
+  font-size: 13px;
+}

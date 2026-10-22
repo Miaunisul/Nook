@@ -80,6 +80,7 @@ function App() {
     }
   });
     const [novaTarefa, setNovaTarefa] = useState('');
+    const [tarefaParaExcluir, setTarefaParaExcluir] = useState<number | null>(null);
   const [tarefas, setTarefas] = useState<
     { id: number; texto: string; concluida: boolean }[]
   >(() => {
@@ -127,6 +128,40 @@ function alternarTarefa(id: number) {
   setTarefas(atualizadas);
   localStorage.setItem('nook-tarefas', JSON.stringify(atualizadas));
 }
+
+
+function solicitarExclusao(id: number) {
+  setTarefaParaExcluir(id);
+}
+
+function cancelarExclusao() {
+  setTarefaParaExcluir(null);
+}
+
+function confirmarExclusao() {
+  if (tarefaParaExcluir === null) return;
+
+  const atualizadas = tarefas.filter(
+    (tarefa) => tarefa.id !== tarefaParaExcluir,
+  );
+
+  setTarefas(atualizadas);
+  localStorage.setItem('nook-tarefas', JSON.stringify(atualizadas));
+  setTarefaParaExcluir(null);
+}
+
+const tarefasConcluidas = tarefas.filter(
+  (tarefa) => tarefa.concluida,
+).length;
+
+const progressoTarefas =
+  tarefas.length === 0
+    ? 0
+    : Math.round((tarefasConcluidas / tarefas.length) * 100);
+const tarefasOrganizadas = [...tarefas].sort(
+  (a, b) => Number(a.concluida) - Number(b.concluida),
+);
+
 
   return (
     <main className="app-shell">
@@ -248,7 +283,31 @@ function alternarTarefa(id: number) {
           )}
         </div>
         ) : widget.name === 'Tasks' ? (
-  <div className="task-list">
+
+          <div className="task-list">
+    <div className="task-progress">
+      <div className="task-progress-header">
+        <span>Seu progresso</span>
+        <span>
+          {tarefasConcluidas} de {tarefas.length} concluídas
+        </span>
+      </div>
+
+      <div
+        className="task-progress-track"
+        role="progressbar"
+        aria-label="Progresso das tarefas"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={progressoTarefas}
+      >
+        <div
+          className="task-progress-fill"
+          style={{ width: `${progressoTarefas}%` }}
+        />
+      </div>
+    </div>
+
     <form
       onSubmit={(event) => {
         event.preventDefault();
@@ -264,23 +323,81 @@ function alternarTarefa(id: number) {
       <button type="submit">Adicionar +</button>
     </form>
 
-    {tarefas.length > 0 && (
+    {tarefasOrganizadas.length > 0 && (
       <ul>
-        {tarefas.map((tarefa) => (
-          <li key={tarefa.id}>
-            <label>
-              <input
-                type="checkbox"
-                checked={tarefa.concluida}
-                onChange={() => alternarTarefa(tarefa.id)}
-              />
-              <span className={tarefa.concluida ? 'task-completed' : ''}>
-                {tarefa.texto}
-              </span>
-            </label>
+        {tarefasOrganizadas.map((tarefa) => (
+          <li key={tarefa.id} className="task-item">
+            <div className="task-item-main">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={tarefa.concluida}
+                  onChange={() => alternarTarefa(tarefa.id)}
+                />
+                <span
+                  className={
+                    tarefa.concluida ? 'task-completed' : ''
+                  }
+                >
+                  {tarefa.texto}
+                </span>
+              </label>
+
+              <button
+
+              type="button"
+              className="task-delete-button"
+              onClick={() => solicitarExclusao(tarefa.id)}
+              aria-label={`Excluir tarefa: ${tarefa.texto}`}
+              title="Excluir tarefa"
+            >
+              <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+             <path d="M3 6h18" />
+            <path d="M8 6V4h8v2" />
+            <path d="m19 6-1 14H6L5 6" />
+            <path d="M10 11v5M14 11v5" />
+          </svg>
+              </button>
+            </div>
+
+            {tarefaParaExcluir === tarefa.id && (
+              <div className="task-delete-confirmation">
+                <span>Excluir esta tarefa?</span>
+
+                <div>
+                  <button
+                    type="button"
+                    onClick={cancelarExclusao}
+                  >
+                    Cancelar
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={confirmarExclusao}
+                  >
+                    Excluir tarefa
+                  </button>
+                </div>
+              </div>
+            )}
           </li>
         ))}
       </ul>
+    )}
+
+    {tarefas.length === 0 && (
+      <p className="task-empty">
+        Nenhuma tarefa por enquanto. Adicione a primeira!
+      </p>
     )}
   </div>
       ) : (
