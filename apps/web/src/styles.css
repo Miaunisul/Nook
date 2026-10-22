@@ -619,3 +619,46 @@ a {
   color: #a9a196;
   font-size: 13px;
 }
+
+
+/* Progresso das tarefas */
+.task-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.task-progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #a9a196;
+  font-size: 12px;
+}
+
+.task-progress-header span:first-child {
+  color: #f3efe7;
+  font-weight: 600;
+}
+
+.task-progress-header span:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.task-progress-track {
+  width: 100%;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #454039;
+}
+
+.task-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: #f2a65a;
+  transition: width 0.3s ease;
+}

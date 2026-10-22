@@ -287,7 +287,7 @@ const tarefasOrganizadas = [...tarefas].sort(
           <div className="task-list">
     <div className="task-progress">
       <div className="task-progress-header">
-        <span>Seu progresso</span>
+        <span>Seu progresso </span>
         <span>
           {tarefasConcluidas} de {tarefas.length} concluídas
         </span>
