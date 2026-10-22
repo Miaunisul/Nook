@@ -55,11 +55,17 @@ a {
 }
 
 .brand {
+  display: flex;
+  align-items: center;
+  width: fit-content;
   margin: 0 0 48px 10px;
-  color: var(--text);
-  font-size: 34px;
-  font-weight: 750;
-  letter-spacing: -1.8px;
+}
+
+.brand img {
+  display: block;
+  width: 132px;
+  height: auto;
+  object-fit: contain;
 }
 
 .brand span {

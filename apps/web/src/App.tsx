@@ -27,7 +27,7 @@ function App() {
     <main className="app-shell">
       <aside className="sidebar">
         <a className="brand" href="/" aria-label="Nook home">
-          nook<span>.</span>
+         <img src="/Nook-Logo.png" alt="Nook" />
         </a>
 
         <p className="sidebar-label">YOUR SPACE</p>
