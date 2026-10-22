@@ -213,3 +213,116 @@ a {
   font-size: 14px;
   line-height: 1.8;
 }
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 23px;
+  font-weight: 650;
+  letter-spacing: -0.6px;
+}
+
+.widget-count {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.widget-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.widget-card {
+  position: relative;
+  min-height: 190px;
+  padding: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.widget-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(242, 166, 90, 0.45);
+  background: #353129;
+}
+
+.widget-number {
+  display: block;
+  margin-bottom: 28px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.widget-card h3 {
+  margin: 0 0 9px;
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 650;
+}
+
+.widget-card p {
+  max-width: 280px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.widget-arrow {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  color: var(--muted);
+  font-size: 18px;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.widget-card:hover .widget-arrow {
+  transform: translate(2px, -2px);
+  color: var(--accent);
+}
+
+.workspace-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 42px;
+  padding: 20px 0 28px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 10px;
+}
+
+@media (max-width: 760px) {
+  .widget-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading h2 {
+    font-size: 20px;
+  }
+
+  .workspace-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
