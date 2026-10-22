@@ -34,6 +34,10 @@ function App() {
       return [];
     }
   });
+    const [novaTarefa, setNovaTarefa] = useState('');
+  const [tarefas, setTarefas] = useState<
+    { id: number; texto: string; concluida: boolean }[]
+  >([]);
 
   function adicionarNota() {
     const texto = nota.trim();
@@ -46,6 +50,28 @@ function App() {
     localStorage.setItem('nook-notas', JSON.stringify(atualizadas));
     setNota('');
   }
+  function adicionarTarefa() {
+  const texto = novaTarefa.trim();
+
+  if (!texto) return;
+
+  setTarefas((atuais) => [
+    ...atuais,
+    { id: Date.now(), texto, concluida: false },
+  ]);
+
+  setNovaTarefa('');
+}
+
+function alternarTarefa(id: number) {
+  setTarefas((atuais) =>
+    atuais.map((tarefa) =>
+      tarefa.id === id
+        ? { ...tarefa, concluida: !tarefa.concluida }
+        : tarefa,
+    ),
+  );
+}
 
   return (
     <main className="app-shell">
