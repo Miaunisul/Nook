@@ -3,22 +3,22 @@ const widgets = [
   {
     number: '01',
     name: 'Pomodoro',
-    description: 'Make time for focused work.',
+    description: 'Produza sem perder o foco.',
   },
   {
     number: '02',
-    name: 'Quick Notes',
-    description: 'Capture ideas before they disappear.',
+    name: 'Notas rápidas',
+    description: 'Não perca nenhuma ideia.',
   },
   {
     number: '03',
     name: 'Tasks',
-    description: 'Keep your next steps in sight.',
+    description: 'Mantenha suas próximas etapas a vista.',
   },
   {
     number: '04',
-    name: 'Shortcuts',
-    description: 'Your favorite tools, one click away.',
+    name: 'Atalhoss',
+    description: 'Suas ferramentas favoritas, a um clique de distância.',
   },
 ];
 
@@ -30,52 +30,51 @@ function App() {
          <img src="/Nook-Logo.png" alt="Nook" />
         </a>
 
-        <p className="sidebar-label">YOUR SPACE</p>
+        <p className="sidebar-label">SUAS SALAS</p>
 
         <nav className="navigation" aria-label="Main navigation">
           <a className="nav-link active" href="#workspace">
-            <span>◫</span> My workspace
+            <span>◫</span> Meu espaço
           </a>
           <a className="nav-link" href="#rooms">
-            <span>◉</span> Private rooms
+            <span>◉</span> Salas privadas
           </a>
           <a className="nav-link" href="#communities">
-            <span>◎</span> Communities
+            <span>◎</span> Comunidades
           </a>
         </nav>
 
         <div className="sidebar-bottom">
           <div className="profile-avatar">N</div>
           <div>
-            <strong>Your profile</strong>
-            <span>Personal workspace</span>
+            <strong>Seu perfil</strong>
+            <span>Área de trabalho pessoal</span>
           </div>
         </div>
       </aside>
 
       <section className="workspace" id="workspace">
         <header className="topbar">
-          <span className="breadcrumb">My workspace / Overview</span>
+          <span className="breadcrumb">Área de trabalho / Visão geral</span>
           <span className="status">
             <span className="status-dot" />
-            Ready to focus
+            Pronto para focar
           </span>
         </header>
 
         <div className="welcome">
-          <p className="eyebrow">YOUR SPACE. YOUR PEOPLE. YOUR FLOW.</p>
-          <h1>A little space<br />to do great things.</h1>
+          <p className="eyebrow">SEU ESPAÇO. SEUS AMIGOS. SEU RITIMO.</p>
+          <h1>Grandes ideias<br />não ocupam espaço.</h1>
           <p className="welcome-description">
-            Your tools, your thoughts, your flow.
-            Everything starts here.
+            Sua ferramenta, seus pensamentos. Começa aqui.
           </p>
         </div>
 
         <section className="widget-section" aria-labelledby="widgets-title">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">YOUR SETUP</p>
-              <h2 id="widgets-title">Your workspace</h2>
+              <p className="eyebrow">SEU SETUP</p>
+              <h2 id="widgets-title">Área de trabalho</h2>
             </div>
             <span className="widget-count">04 WIDGETS</span>
           </div>
@@ -97,8 +96,8 @@ function App() {
         </section>
 
         <footer className="workspace-footer">
-          <span>NOOK — EARLY DEVELOPMENT</span>
-          <span>Make room for what matters.</span>
+          <span>NOOK — Fase inicial,</span>
+          <span> crie um canto para o que importa.</span>
         </footer>
       </section>
     </main>
