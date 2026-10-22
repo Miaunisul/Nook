@@ -200,10 +200,10 @@ a {
   max-width: 700px;
   margin: 0;
   color: var(--text);
-  font-size: clamp(36px, 4.5vw, 58px);
+  font-size: clamp(38px, 4vw, 54px);
   font-weight: 650;
   letter-spacing: -2.5px;
-  line-height: 1.1;
+  line-height: 1.12;
 }
 
 .welcome-description {
