@@ -679,3 +679,102 @@ a {
   background: #f2a65a;
   transition: width 0.3s ease;
 }
+
+
+/* Notas rápidas */
+.quick-note-item {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(48, 45, 40, 0.65);
+  list-style: none;
+}
+
+.quick-note-text {
+  flex: 1;
+  min-width: 0;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.quick-note-delete {
+  display: inline-flex;
+  flex: 0 0 32px;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 6px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: #a9a196;
+  cursor: pointer;
+}
+
+.quick-note-delete svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+
+.quick-note-delete:hover {
+  background: rgba(242, 166, 90, 0.15);
+  color: var(--accent);
+}
+
+.quick-note-confirmation {
+  display: flex;
+  flex: 1 0 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  color: var(--text);
+  font-size: 12px;
+}
+
+.quick-note-confirmation > div {
+  flex-wrap: wrap;
+  display: flex;
+  gap: 8px;
+}
+
+.quick-note-confirmation button {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.quick-note-confirmation button:last-child {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--background);
+}
+
+.quick-notes-empty {
+  color: #a9a196;
+  font-size: 13px;
+  line-height: 1.5;
+}

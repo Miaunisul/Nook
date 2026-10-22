@@ -71,6 +71,7 @@ function App() {
 
 
   const [nota, setNota] = useState('');
+  const [notaParaExcluir, setNotaParaExcluir] = useState<number | null>(null);
   const [notas, setNotas] = useState<string[]>(() => {
     try {
       const salvas = localStorage.getItem('nook-notas');
@@ -103,6 +104,27 @@ function App() {
     localStorage.setItem('nook-notas', JSON.stringify(atualizadas));
     setNota('');
   }
+
+  function solicitarExclusaoNota(index: number) {
+  setNotaParaExcluir(index);
+}
+
+function cancelarExclusaoNota() {
+  setNotaParaExcluir(null);
+}
+
+function confirmarExclusaoNota() {
+  if (notaParaExcluir === null) return;
+
+  const atualizadas = notas.filter(
+    (_, index) => index !== notaParaExcluir,
+  );
+
+  setNotas(atualizadas);
+  localStorage.setItem('nook-notas', JSON.stringify(atualizadas));
+  setNotaParaExcluir(null);
+}
+
   function adicionarTarefa() {
   const texto = novaTarefa.trim();
 
@@ -256,36 +278,92 @@ const tarefasOrganizadas = [...tarefas].sort(
       </button>
     </div>
   </div>
-      ) : widget.name === 'Notas rápidas' ? (
-        <div className="quick-notes">
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              adicionarNota();
-            }}
+
+) : widget.name === 'Notas rápidas' ? (
+  <div className="quick-notes">
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        adicionarNota();
+      }}
+    >
+      <textarea
+        value={nota}
+        onChange={(event) => setNota(event.target.value)}
+        placeholder="Escreva uma ideia..."
+        aria-label="Escreva uma nota"
+        rows={3}
+      />
+
+      <button type="submit">Salvar nota +</button>
+    </form>
+
+    {notas.length > 0 && (
+      <ul className="quick-notes-list">
+        {notas.map((item, index) => (
+          <li
+            key={`${index}-${item}`}
+            className="quick-note-item"
           >
-            <textarea
-              value={nota}
-              onChange={(event) => setNota(event.target.value)}
-              placeholder="Escreva uma ideia..."
-              aria-label="Escreva uma nota"
-              rows={3}
-            />
+            <span className="quick-note-text">{item}</span>
 
-            <button type="submit">Salvar nota +</button>
-          </form>
+            <button
+              type="button"
+              className="quick-note-delete"
+              onClick={() => solicitarExclusaoNota(index)}
+              aria-label={`Excluir nota: ${item}`}
+              title="Excluir nota"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M3 6h18" />
+                <path d="M8 6V4h8v2" />
+                <path d="m19 6-1 14H6L5 6" />
+                <path d="M10 11v5M14 11v5" />
+              </svg>
+            </button>
 
-          {notas.length > 0 && (
-            <ul className="quick-notes-list">
-              {notas.map((item, index) => (
-                <li key={`${index}-${item}`}>{item}</li>
-              ))}
-            </ul>
-          )}
-        </div>
-        ) : widget.name === 'Tasks' ? (
+            {notaParaExcluir === index && (
+              <div className="quick-note-confirmation">
+                <span>Excluir esta nota?</span>
 
-          <div className="task-list">
+                <div>
+                  <button
+                    type="button"
+                    onClick={cancelarExclusaoNota}
+                  >
+                    Cancelar
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={confirmarExclusaoNota}
+                  >
+                    Excluir nota
+                  </button>
+                </div>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    )}
+
+    {notas.length === 0 && (
+      <p className="quick-notes-empty">
+        Nenhuma nota por enquanto. Guarde sua primeira ideia!
+      </p>
+    )}
+  </div>
+) : widget.name === 'Tasks' ? (
+  <div className="task-list">
     <div className="task-progress">
       <div className="task-progress-header">
         <span>Seu progresso</span>
@@ -345,27 +423,26 @@ const tarefasOrganizadas = [...tarefas].sort(
               </label>
 
               <button
-
-              type="button"
-              className="task-delete-button"
-              onClick={() => solicitarExclusao(tarefa.id)}
-              aria-label={`Excluir tarefa: ${tarefa.texto}`}
-              title="Excluir tarefa"
-            >
-              <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-             <path d="M3 6h18" />
-            <path d="M8 6V4h8v2" />
-            <path d="m19 6-1 14H6L5 6" />
-            <path d="M10 11v5M14 11v5" />
-          </svg>
+                type="button"
+                className="task-delete-button"
+                onClick={() => solicitarExclusao(tarefa.id)}
+                aria-label={`Excluir tarefa: ${tarefa.texto}`}
+                title="Excluir tarefa"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 6h18" />
+                  <path d="M8 6V4h8v2" />
+                  <path d="m19 6-1 14H6L5 6" />
+                  <path d="M10 11v5M14 11v5" />
+                </svg>
               </button>
             </div>
 
@@ -401,7 +478,7 @@ const tarefasOrganizadas = [...tarefas].sort(
       </p>
     )}
   </div>
-      ) : (
+) : (
                 <span className="widget-arrow" aria-hidden="true">
                   ↗
                 </span>
