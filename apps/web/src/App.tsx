@@ -203,17 +203,18 @@ const tarefasOrganizadas = [...tarefas].sort(
         </header>
 
         <div className="welcome">
-          <p className="eyebrow">SEU ESPAÇO. SEUS AMIGOS. SEU RITIMO.</p>
-          <h1>Grandes ideias<br />não ocupam espaço.</h1>
+          <p className="eyebrow">Olá, dev!</p>
+          <h1>Seu espaço,<br/>suas pessoas,<br/>seu fluxo.</h1>
           <p className="welcome-description">
-            Sua ferramenta, seus pensamentos. Começa aqui.
+            Organize sua rotina, conecte-se com sua comunidade <br/>
+            e faça mais do seu dia.
           </p>
         </div>
 
         <section className="widget-section" aria-labelledby="widgets-title">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">SEU SETUP</p>
+              <p className="eyebrow">SEU ESPAÇO</p>
               <h2 id="widgets-title">Área de trabalho</h2>
             </div>
             <span className="widget-count">04 WIDGETS</span>
@@ -287,7 +288,7 @@ const tarefasOrganizadas = [...tarefas].sort(
           <div className="task-list">
     <div className="task-progress">
       <div className="task-progress-header">
-        <span>Seu progresso </span>
+        <span>Seu progresso</span>
         <span>
           {tarefasConcluidas} de {tarefas.length} concluídas
         </span>
