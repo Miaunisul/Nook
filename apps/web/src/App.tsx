@@ -37,7 +37,14 @@ function App() {
     const [novaTarefa, setNovaTarefa] = useState('');
   const [tarefas, setTarefas] = useState<
     { id: number; texto: string; concluida: boolean }[]
-  >([]);
+  >(() => {
+  try {
+    const salvas = localStorage.getItem('nook-tarefas');
+    return salvas ? JSON.parse(salvas) : [];
+  } catch {
+    return [];
+  }
+});
 
   function adicionarNota() {
     const texto = nota.trim();
@@ -55,22 +62,25 @@ function App() {
 
   if (!texto) return;
 
-  setTarefas((atuais) => [
-    ...atuais,
-    { id: Date.now(), texto, concluida: false },
-  ]);
+  const atualizadas = [
+  ...tarefas,
+  { id: Date.now(), texto, concluida: false },
+];
+
+setTarefas(atualizadas);
+localStorage.setItem('nook-tarefas', JSON.stringify(atualizadas));
 
   setNovaTarefa('');
 }
 
 function alternarTarefa(id: number) {
-  setTarefas((atuais) =>
-    atuais.map((tarefa) =>
-      tarefa.id === id
-        ? { ...tarefa, concluida: !tarefa.concluida }
-        : tarefa,
-    ),
+  const atualizadas = tarefas.map((tarefa) =>
+    tarefa.id === id
+      ? { ...tarefa, concluida: !tarefa.concluida }
+      : tarefa,
   );
+  setTarefas(atualizadas);
+  localStorage.setItem('nook-tarefas', JSON.stringify(atualizadas));
 }
 
   return (
