@@ -99,9 +99,39 @@ function App() {
                   <h3>{widget.name}</h3>
                   <p>{widget.description}</p>
                 </div>
+
+                {widget.name === 'Notas rápidas' ? (
+        <div className="quick-notes">
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              adicionarNota();
+            }}
+          >
+            <textarea
+              value={nota}
+              onChange={(event) => setNota(event.target.value)}
+              placeholder="Escreva uma ideia..."
+              aria-label="Escreva uma nota"
+              rows={3}
+            />
+
+            <button type="submit">Salvar nota +</button>
+          </form>
+
+          {notas.length > 0 && (
+            <ul className="quick-notes-list">
+              {notas.map((item, index) => (
+                <li key={`${index}-${item}`}>{item}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ) : (
                 <span className="widget-arrow" aria-hidden="true">
                   ↗
                 </span>
+                 )}
               </article>
             ))}
           </div>
