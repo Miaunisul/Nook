@@ -26,15 +26,27 @@ const widgets = [
 function App() {
 
   const [nota, setNota] = useState('');
-  const [notas, setNotas] = useState<string[]>([]);
+  const [notas, setNotas] = useState<string[]>(() => {
+    try {
+      const salvas = localStorage.getItem('nook-notas');
+      return salvas ? (JSON.parse(salvas) as string[]) : [];
+    } catch {
+      return [];
+    }
+  });
+
   function adicionarNota() {
     const texto = nota.trim();
 
     if (!texto) return;
 
-    setNotas((atuais) => [texto, ...atuais]);
+    const atualizadas = [texto, ...notas];
+
+    setNotas(atualizadas);
+    localStorage.setItem('nook-notas', JSON.stringify(atualizadas));
     setNota('');
   }
+
   return (
     <main className="app-shell">
       <aside className="sidebar">
