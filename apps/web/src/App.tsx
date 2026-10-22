@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useEffect, useState } from 'react';
 
 const widgets = [
   {
@@ -24,6 +24,51 @@ const widgets = [
 ];
 
 function App() {
+  const [pomodoroMinutos, setPomodoroMinutos] = useState(25);
+  const [pomodoroSegundos, setPomodoroSegundos] = useState(0);
+  const [pomodoroAtivo, setPomodoroAtivo] = useState(false);
+
+
+  useEffect(() => {
+    if (!pomodoroAtivo) return;
+
+    const intervalo = window.setInterval(() => {
+      if (pomodoroMinutos === 0 && pomodoroSegundos === 0) {
+        setPomodoroAtivo(false);
+        return;
+      }
+
+      if (pomodoroSegundos === 0) {
+        setPomodoroMinutos((minutos) => minutos - 1);
+        setPomodoroSegundos(59);
+        return;
+      }
+
+      setPomodoroSegundos((segundos) => segundos - 1);
+    }, 1000);
+
+    return () => window.clearInterval(intervalo);
+  }, [pomodoroAtivo, pomodoroMinutos, pomodoroSegundos]);
+
+  function iniciarPomodoro() {
+    if (pomodoroMinutos === 0 && pomodoroSegundos === 0) {
+      setPomodoroMinutos(25);
+      setPomodoroSegundos(0);
+    }
+
+    setPomodoroAtivo(true);
+  }
+
+  function pausarPomodoro() {
+    setPomodoroAtivo(false);
+  }
+
+  function reiniciarPomodoro() {
+    setPomodoroAtivo(false);
+    setPomodoroMinutos(25);
+    setPomodoroSegundos(0);
+  }
+
 
   const [nota, setNota] = useState('');
   const [notas, setNotas] = useState<string[]>(() => {
@@ -117,7 +162,7 @@ function alternarTarefa(id: number) {
         <header className="topbar">
           <span className="breadcrumb">Área de trabalho / Visão geral</span>
           <span className="status">
-            <span className="status-dot" />
+          <span className="status-dot" />
             Pronto para focar
           </span>
         </header>
@@ -148,7 +193,34 @@ function alternarTarefa(id: number) {
                   <p>{widget.description}</p>
                 </div>
 
-                {widget.name === 'Notas rápidas' ? (
+                {widget.name === 'Pomodoro' ? (
+  <div className="pomodoro">
+    <div className="pomodoro-timer">
+      {String(pomodoroMinutos).padStart(2, '0')}:
+      {String(pomodoroSegundos).padStart(2, '0')}
+    </div>
+
+    <div className="pomodoro-controls">
+      {pomodoroAtivo ? (
+        <button type="button" onClick={pausarPomodoro}>
+          Pausar
+        </button>
+      ) : (
+        <button type="button" onClick={iniciarPomodoro}>
+          Iniciar foco
+        </button>
+      )}
+
+      <button
+        className="pomodoro-reset"
+        type="button"
+        onClick={reiniciarPomodoro}
+      >
+        Reiniciar
+      </button>
+    </div>
+  </div>
+      ) : widget.name === 'Notas rápidas' ? (
         <div className="quick-notes">
           <form
             onSubmit={(event) => {
