@@ -165,6 +165,42 @@ function alternarTarefa(id: number) {
             </ul>
           )}
         </div>
+        ) : widget.name === 'Tasks' ? (
+  <div className="task-list">
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        adicionarTarefa();
+      }}
+    >
+      <input
+        value={novaTarefa}
+        onChange={(event) => setNovaTarefa(event.target.value)}
+        placeholder="Adicionar tarefa..."
+        aria-label="Nova tarefa"
+      />
+      <button type="submit">Adicionar +</button>
+    </form>
+
+    {tarefas.length > 0 && (
+      <ul>
+        {tarefas.map((tarefa) => (
+          <li key={tarefa.id}>
+            <label>
+              <input
+                type="checkbox"
+                checked={tarefa.concluida}
+                onChange={() => alternarTarefa(tarefa.id)}
+              />
+              <span className={tarefa.concluida ? 'task-completed' : ''}>
+                {tarefa.texto}
+              </span>
+            </label>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
       ) : (
                 <span className="widget-arrow" aria-hidden="true">
                   ↗
