@@ -1,4 +1,4 @@
-import {useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const widgets = [
   {
@@ -18,16 +18,17 @@ const widgets = [
   },
   {
     number: '04',
-    name: 'Atalhoss',
+    name: 'Atalhos',
     description: 'Suas ferramentas favoritas, a um clique de distância.',
   },
 ];
+type Pagina = 'home' | 'pomodoro' | 'notas' | 'tasks' | 'atalhos';
 
 function App() {
+  const [paginaAtual, setPaginaAtual] = useState<Pagina>('home');
   const [pomodoroMinutos, setPomodoroMinutos] = useState(25);
   const [pomodoroSegundos, setPomodoroSegundos] = useState(0);
   const [pomodoroAtivo, setPomodoroAtivo] = useState(false);
-
 
   useEffect(() => {
     if (!pomodoroAtivo) return;
@@ -69,7 +70,6 @@ function App() {
     setPomodoroSegundos(0);
   }
 
-
   const [nota, setNota] = useState('');
   const [notaParaExcluir, setNotaParaExcluir] = useState<number | null>(null);
   const [notas, setNotas] = useState<string[]>(() => {
@@ -80,18 +80,20 @@ function App() {
       return [];
     }
   });
-    const [novaTarefa, setNovaTarefa] = useState('');
-    const [tarefaParaExcluir, setTarefaParaExcluir] = useState<number | null>(null);
+  const [novaTarefa, setNovaTarefa] = useState('');
+  const [tarefaParaExcluir, setTarefaParaExcluir] = useState<number | null>(
+    null,
+  );
   const [tarefas, setTarefas] = useState<
     { id: number; texto: string; concluida: boolean }[]
   >(() => {
-  try {
-    const salvas = localStorage.getItem('nook-tarefas');
-    return salvas ? JSON.parse(salvas) : [];
-  } catch {
-    return [];
-  }
-});
+    try {
+      const salvas = localStorage.getItem('nook-tarefas');
+      return salvas ? JSON.parse(salvas) : [];
+    } catch {
+      return [];
+    }
+  });
 
   function adicionarNota() {
     const texto = nota.trim();
@@ -106,90 +108,89 @@ function App() {
   }
 
   function solicitarExclusaoNota(index: number) {
-  setNotaParaExcluir(index);
-}
+    setNotaParaExcluir(index);
+  }
 
-function cancelarExclusaoNota() {
-  setNotaParaExcluir(null);
-}
+  function cancelarExclusaoNota() {
+    setNotaParaExcluir(null);
+  }
 
-function confirmarExclusaoNota() {
-  if (notaParaExcluir === null) return;
+  function confirmarExclusaoNota() {
+    if (notaParaExcluir === null) return;
 
-  const atualizadas = notas.filter(
-    (_, index) => index !== notaParaExcluir,
-  );
+    const atualizadas = notas.filter((_, index) => index !== notaParaExcluir);
 
-  setNotas(atualizadas);
-  localStorage.setItem('nook-notas', JSON.stringify(atualizadas));
-  setNotaParaExcluir(null);
-}
+    setNotas(atualizadas);
+    localStorage.setItem('nook-notas', JSON.stringify(atualizadas));
+    setNotaParaExcluir(null);
+  }
 
   function adicionarTarefa() {
-  const texto = novaTarefa.trim();
+    const texto = novaTarefa.trim();
 
-  if (!texto) return;
+    if (!texto) return;
 
-  const atualizadas = [
-  ...tarefas,
-  { id: Date.now(), texto, concluida: false },
-];
+    const atualizadas = [
+      ...tarefas,
+      { id: Date.now(), texto, concluida: false },
+    ];
 
-setTarefas(atualizadas);
-localStorage.setItem('nook-tarefas', JSON.stringify(atualizadas));
+    setTarefas(atualizadas);
+    localStorage.setItem('nook-tarefas', JSON.stringify(atualizadas));
 
-  setNovaTarefa('');
-}
+    setNovaTarefa('');
+  }
 
-function alternarTarefa(id: number) {
-  const atualizadas = tarefas.map((tarefa) =>
-    tarefa.id === id
-      ? { ...tarefa, concluida: !tarefa.concluida }
-      : tarefa,
+  function alternarTarefa(id: number) {
+    const atualizadas = tarefas.map((tarefa) =>
+      tarefa.id === id ? { ...tarefa, concluida: !tarefa.concluida } : tarefa,
+    );
+    setTarefas(atualizadas);
+    localStorage.setItem('nook-tarefas', JSON.stringify(atualizadas));
+  }
+
+  function solicitarExclusao(id: number) {
+    setTarefaParaExcluir(id);
+  }
+
+  function cancelarExclusao() {
+    setTarefaParaExcluir(null);
+  }
+
+  function confirmarExclusao() {
+    if (tarefaParaExcluir === null) return;
+
+    const atualizadas = tarefas.filter(
+      (tarefa) => tarefa.id !== tarefaParaExcluir,
+    );
+
+    setTarefas(atualizadas);
+    localStorage.setItem('nook-tarefas', JSON.stringify(atualizadas));
+    setTarefaParaExcluir(null);
+  }
+
+  const tarefasConcluidas = tarefas.filter((tarefa) => tarefa.concluida).length;
+
+  const progressoTarefas =
+    tarefas.length === 0
+      ? 0
+      : Math.round((tarefasConcluidas / tarefas.length) * 100);
+  const tarefasOrganizadas = [...tarefas].sort(
+    (a, b) => Number(a.concluida) - Number(b.concluida),
   );
-  setTarefas(atualizadas);
-  localStorage.setItem('nook-tarefas', JSON.stringify(atualizadas));
-}
 
-
-function solicitarExclusao(id: number) {
-  setTarefaParaExcluir(id);
-}
-
-function cancelarExclusao() {
-  setTarefaParaExcluir(null);
-}
-
-function confirmarExclusao() {
-  if (tarefaParaExcluir === null) return;
-
-  const atualizadas = tarefas.filter(
-    (tarefa) => tarefa.id !== tarefaParaExcluir,
-  );
-
-  setTarefas(atualizadas);
-  localStorage.setItem('nook-tarefas', JSON.stringify(atualizadas));
-  setTarefaParaExcluir(null);
-}
-
-const tarefasConcluidas = tarefas.filter(
-  (tarefa) => tarefa.concluida,
-).length;
-
-const progressoTarefas =
-  tarefas.length === 0
-    ? 0
-    : Math.round((tarefasConcluidas / tarefas.length) * 100);
-const tarefasOrganizadas = [...tarefas].sort(
-  (a, b) => Number(a.concluida) - Number(b.concluida),
-);
-
+  const paginaDoWidget: Record<string, Pagina> = {
+    Pomodoro: 'pomodoro',
+    'Notas rápidas': 'notas',
+    Tasks: 'tasks',
+    Atalhos: 'atalhos',
+  };
 
   return (
     <main className="app-shell">
       <aside className="sidebar">
         <a className="brand" href="/" aria-label="Nook home">
-         <img src="/Nook-Logo.png" alt="Nook" />
+          <img src="/Nook-Logo.png" alt="Nook" />
         </a>
 
         <p className="sidebar-label">SUAS SALAS</p>
@@ -219,17 +220,23 @@ const tarefasOrganizadas = [...tarefas].sort(
         <header className="topbar">
           <span className="breadcrumb">Área de trabalho / Visão geral</span>
           <span className="status">
-          <span className="status-dot" />
+            <span className="status-dot" />
             Pronto para focar
           </span>
         </header>
 
         <div className="welcome">
           <p className="eyebrow">Olá, dev!</p>
-          <h1>Seu espaço,<br/>suas pessoas,<br/>seu fluxo.</h1>
+          <h1>
+            Seu espaço,
+            <br />
+            suas pessoas,
+            <br />
+            seu fluxo.
+          </h1>
           <p className="welcome-description">
-            Organize sua rotina, conecte-se com sua comunidade <br/>
-            e faça mais do seu dia.
+            Organize sua rotina, conecte-se com sua comunidade <br />e faça mais
+            do seu dia.
           </p>
         </div>
 
@@ -243,248 +250,262 @@ const tarefasOrganizadas = [...tarefas].sort(
           </div>
 
           <div className="widget-grid">
-            {widgets.map((widget) => (
-              <article className="widget-card" key={widget.number}>
-                <span className="widget-number">{widget.number}</span>
-                <div>
-                  <h3>{widget.name}</h3>
-                  <p>{widget.description}</p>
-                </div>
-
-                {widget.name === 'Pomodoro' ? (
-  <div className="pomodoro">
-    <div className="pomodoro-timer">
-      {String(pomodoroMinutos).padStart(2, '0')}:
-      {String(pomodoroSegundos).padStart(2, '0')}
-    </div>
-
-    <div className="pomodoro-controls">
-      {pomodoroAtivo ? (
-        <button type="button" onClick={pausarPomodoro}>
-          Pausar
-        </button>
-      ) : (
-        <button type="button" onClick={iniciarPomodoro}>
-          Iniciar foco
-        </button>
-      )}
-
-      <button
-        className="pomodoro-reset"
-        type="button"
-        onClick={reiniciarPomodoro}
-      >
-        Reiniciar
-      </button>
-    </div>
-  </div>
-
-) : widget.name === 'Notas rápidas' ? (
-  <div className="quick-notes">
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        adicionarNota();
-      }}
-    >
-      <textarea
-        value={nota}
-        onChange={(event) => setNota(event.target.value)}
-        placeholder="Escreva uma ideia..."
-        aria-label="Escreva uma nota"
-        rows={3}
-      />
-
-      <button type="submit">Salvar nota +</button>
-    </form>
-
-    {notas.length > 0 && (
-      <ul className="quick-notes-list">
-        {notas.map((item, index) => (
-          <li
-            key={`${index}-${item}`}
-            className="quick-note-item"
-          >
-            <span className="quick-note-text">{item}</span>
-
-            <button
-              type="button"
-              className="quick-note-delete"
-              onClick={() => solicitarExclusaoNota(index)}
-              aria-label={`Excluir nota: ${item}`}
-              title="Excluir nota"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M3 6h18" />
-                <path d="M8 6V4h8v2" />
-                <path d="m19 6-1 14H6L5 6" />
-                <path d="M10 11v5M14 11v5" />
-              </svg>
-            </button>
-
-            {notaParaExcluir === index && (
-              <div className="quick-note-confirmation">
-                <span>Excluir esta nota?</span>
-
-                <div>
-                  <button
-                    type="button"
-                    onClick={cancelarExclusaoNota}
-                  >
-                    Cancelar
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={confirmarExclusaoNota}
-                  >
-                    Excluir nota
-                  </button>
-                </div>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
-    )}
-
-    {notas.length === 0 && (
-      <p className="quick-notes-empty">
-        Nenhuma nota por enquanto. Guarde sua primeira ideia!
-      </p>
-    )}
-  </div>
-) : widget.name === 'Tasks' ? (
-  <div className="task-list">
-    <div className="task-progress">
-      <div className="task-progress-header">
-        <span>Seu progresso</span>
-        <span>
-          {tarefasConcluidas} de {tarefas.length} concluídas
-        </span>
-      </div>
-
-      <div
-        className="task-progress-track"
-        role="progressbar"
-        aria-label="Progresso das tarefas"
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={progressoTarefas}
-      >
-        <div
-          className="task-progress-fill"
-          style={{ width: `${progressoTarefas}%` }}
-        />
-      </div>
-    </div>
-
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        adicionarTarefa();
-      }}
-    >
-      <input
-        value={novaTarefa}
-        onChange={(event) => setNovaTarefa(event.target.value)}
-        placeholder="Adicionar tarefa..."
-        aria-label="Nova tarefa"
-      />
-      <button type="submit">Adicionar +</button>
-    </form>
-
-    {tarefasOrganizadas.length > 0 && (
-      <ul>
-        {tarefasOrganizadas.map((tarefa) => (
-          <li key={tarefa.id} className="task-item">
-            <div className="task-item-main">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={tarefa.concluida}
-                  onChange={() => alternarTarefa(tarefa.id)}
-                />
-                <span
-                  className={
-                    tarefa.concluida ? 'task-completed' : ''
-                  }
+            {widgets
+              .filter(
+                (widget) =>
+                  paginaAtual === 'home' ||
+                  paginaDoWidget[widget.name] === paginaAtual,
+              )
+              .map((widget) => (
+                <article
+                  className="widget-card"
+                  key={widget.number}
+                  onClick={() => {
+                    if (paginaAtual === 'home') {
+                      setPaginaAtual(paginaDoWidget[widget.name] ?? 'home');
+                    }
+                  }}
                 >
-                  {tarefa.texto}
-                </span>
-              </label>
+                  <span className="widget-number">{widget.number}</span>
+                  <div>
+                    <h3>{widget.name}</h3>
+                    <p>{widget.description}</p>
+                  </div>
+                  {paginaAtual !== 'home' && widget.name === 'Pomodoro' ? (
+                    <div className="pomodoro">
+                      <div className="pomodoro-timer">
+                        {String(pomodoroMinutos).padStart(2, '0')}:
+                        {String(pomodoroSegundos).padStart(2, '0')}
+                      </div>
 
-              <button
-                type="button"
-                className="task-delete-button"
-                onClick={() => solicitarExclusao(tarefa.id)}
-                aria-label={`Excluir tarefa: ${tarefa.texto}`}
-                title="Excluir tarefa"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M3 6h18" />
-                  <path d="M8 6V4h8v2" />
-                  <path d="m19 6-1 14H6L5 6" />
-                  <path d="M10 11v5M14 11v5" />
-                </svg>
-              </button>
-            </div>
+                      <div className="pomodoro-controls">
+                        {pomodoroAtivo ? (
+                          <button type="button" onClick={pausarPomodoro}>
+                            Pausar
+                          </button>
+                        ) : (
+                          <button type="button" onClick={iniciarPomodoro}>
+                            Iniciar foco
+                          </button>
+                        )}
 
-            {tarefaParaExcluir === tarefa.id && (
-              <div className="task-delete-confirmation">
-                <span>Excluir esta tarefa?</span>
+                        <button
+                          className="pomodoro-reset"
+                          type="button"
+                          onClick={reiniciarPomodoro}
+                        >
+                          Reiniciar
+                        </button>
+                      </div>
+                    </div>
+                  ) : widget.name === 'Notas rápidas' ? (
+                    <div className="quick-notes">
+                      <form
+                        onSubmit={(event) => {
+                          event.preventDefault();
+                          adicionarNota();
+                        }}
+                      >
+                        <textarea
+                          value={nota}
+                          onChange={(event) => setNota(event.target.value)}
+                          placeholder="Escreva uma ideia..."
+                          aria-label="Escreva uma nota"
+                          rows={3}
+                        />
 
-                <div>
-                  <button
-                    type="button"
-                    onClick={cancelarExclusao}
-                  >
-                    Cancelar
-                  </button>
+                        <button type="submit">Salvar nota +</button>
+                      </form>
 
-                  <button
-                    type="button"
-                    onClick={confirmarExclusao}
-                  >
-                    Excluir tarefa
-                  </button>
-                </div>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
-    )}
+                      {notas.length > 0 && (
+                        <ul className="quick-notes-list">
+                          {notas.map((item, index) => (
+                            <li
+                              key={`${index}-${item}`}
+                              className="quick-note-item"
+                            >
+                              <span className="quick-note-text">{item}</span>
 
-    {tarefas.length === 0 && (
-      <p className="task-empty">
-        Nenhuma tarefa por enquanto. Adicione a primeira!
-      </p>
-    )}
-  </div>
-) : (
-                <span className="widget-arrow" aria-hidden="true">
-                  ↗
-                </span>
-                 )}
-              </article>
-            ))}
+                              <button
+                                type="button"
+                                className="quick-note-delete"
+                                onClick={() => solicitarExclusaoNota(index)}
+                                aria-label={`Excluir nota: ${item}`}
+                                title="Excluir nota"
+                              >
+                                <svg
+                                  viewBox="0 0 24 24"
+                                  aria-hidden="true"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="1.8"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <path d="M3 6h18" />
+                                  <path d="M8 6V4h8v2" />
+                                  <path d="m19 6-1 14H6L5 6" />
+                                  <path d="M10 11v5M14 11v5" />
+                                </svg>
+                              </button>
+
+                              {notaParaExcluir === index && (
+                                <div className="quick-note-confirmation">
+                                  <span>Excluir esta nota?</span>
+
+                                  <div>
+                                    <button
+                                      type="button"
+                                      onClick={cancelarExclusaoNota}
+                                    >
+                                      Cancelar
+                                    </button>
+
+                                    <button
+                                      type="button"
+                                      onClick={confirmarExclusaoNota}
+                                    >
+                                      Excluir nota
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {notas.length === 0 && (
+                        <p className="quick-notes-empty">
+                          Nenhuma nota por enquanto. Guarde sua primeira ideia!
+                        </p>
+                      )}
+                    </div>
+                  ) : widget.name === 'Tasks' ? (
+                    <div className="task-list">
+                      <div className="task-progress">
+                        <div className="task-progress-header">
+                          <span>Seu progresso</span>
+                          <span>
+                            {tarefasConcluidas} de {tarefas.length} concluídas
+                          </span>
+                        </div>
+
+                        <div
+                          className="task-progress-track"
+                          role="progressbar"
+                          aria-label="Progresso das tarefas"
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          aria-valuenow={progressoTarefas}
+                        >
+                          <div
+                            className="task-progress-fill"
+                            style={{ width: `${progressoTarefas}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      <form
+                        onSubmit={(event) => {
+                          event.preventDefault();
+                          adicionarTarefa();
+                        }}
+                      >
+                        <input
+                          value={novaTarefa}
+                          onChange={(event) =>
+                            setNovaTarefa(event.target.value)
+                          }
+                          placeholder="Adicionar tarefa..."
+                          aria-label="Nova tarefa"
+                        />
+                        <button type="submit">Adicionar +</button>
+                      </form>
+
+                      {tarefasOrganizadas.length > 0 && (
+                        <ul>
+                          {tarefasOrganizadas.map((tarefa) => (
+                            <li key={tarefa.id} className="task-item">
+                              <div className="task-item-main">
+                                <label>
+                                  <input
+                                    type="checkbox"
+                                    checked={tarefa.concluida}
+                                    onChange={() => alternarTarefa(tarefa.id)}
+                                  />
+                                  <span
+                                    className={
+                                      tarefa.concluida ? 'task-completed' : ''
+                                    }
+                                  >
+                                    {tarefa.texto}
+                                  </span>
+                                </label>
+
+                                <button
+                                  type="button"
+                                  className="task-delete-button"
+                                  onClick={() => solicitarExclusao(tarefa.id)}
+                                  aria-label={`Excluir tarefa: ${tarefa.texto}`}
+                                  title="Excluir tarefa"
+                                >
+                                  <svg
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.8"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="M3 6h18" />
+                                    <path d="M8 6V4h8v2" />
+                                    <path d="m19 6-1 14H6L5 6" />
+                                    <path d="M10 11v5M14 11v5" />
+                                  </svg>
+                                </button>
+                              </div>
+
+                              {tarefaParaExcluir === tarefa.id && (
+                                <div className="task-delete-confirmation">
+                                  <span>Excluir esta tarefa?</span>
+
+                                  <div>
+                                    <button
+                                      type="button"
+                                      onClick={cancelarExclusao}
+                                    >
+                                      Cancelar
+                                    </button>
+
+                                    <button
+                                      type="button"
+                                      onClick={confirmarExclusao}
+                                    >
+                                      Excluir tarefa
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {tarefas.length === 0 && (
+                        <p className="task-empty">
+                          Nenhuma tarefa por enquanto. Adicione a primeira!
+                        </p>
+                      )}
+                    </div>
+                  ) : widget.name === 'Atalhos' ? (
+                    <p className="widget-placeholder">
+                      Os atalhos estarão disponíveis em breve.
+                    </p>
+                  ) : null}
+                </article>
+              ))}
           </div>
         </section>
 
