@@ -24,11 +24,29 @@ const widgets = [
 ];
 type Pagina = 'home' | 'pomodoro' | 'notas' | 'tasks' | 'atalhos';
 
+type Atalho = {
+  id: number;
+  nome: string;
+  url: string;
+};
+
 function App() {
   const [paginaAtual, setPaginaAtual] = useState<Pagina>('home');
   const [pomodoroMinutos, setPomodoroMinutos] = useState(25);
   const [pomodoroSegundos, setPomodoroSegundos] = useState(0);
   const [pomodoroAtivo, setPomodoroAtivo] = useState(false);
+
+  const [novoAtalhoNome, setNovoAtalhoNome] = useState('');
+const [novoAtalhoUrl, setNovoAtalhoUrl] = useState('');
+
+const [atalhos, setAtalhos] = useState<Atalho[]>(() => {
+  try {
+    const salvos = localStorage.getItem('nook-atalhos');
+    return salvos ? (JSON.parse(salvos) as Atalho[]) : [];
+  } catch {
+    return [];
+  }
+});
 
   useEffect(() => {
     if (!pomodoroAtivo) return;
@@ -185,7 +203,54 @@ function App() {
     Tasks: 'tasks',
     Atalhos: 'atalhos',
   };
+  function adicionarAtalho() {
+  const nome = novoAtalhoNome.trim();
+  const entrada = novoAtalhoUrl.trim();
 
+  if (!nome || !entrada) {
+    return;
+  }
+
+  let urlFinal: URL;
+
+  try {
+    const entradaComProtocolo = /^https?:\/\//i.test(entrada)
+      ? entrada
+      : `https://${entrada}`;
+
+    urlFinal = new URL(entradaComProtocolo);
+  } catch {
+    return;
+  }
+
+  if (
+    urlFinal.protocol !== 'http:' &&
+    urlFinal.protocol !== 'https:'
+  ) {
+    return;
+  }
+
+  const novoAtalho: Atalho = {
+    id: Date.now(),
+    nome,
+    url: urlFinal.href,
+  };
+
+  const atualizados = [...atalhos, novoAtalho];
+
+  setAtalhos(atualizados);
+  localStorage.setItem('nook-atalhos', JSON.stringify(atualizados));
+
+  setNovoAtalhoNome('');
+  setNovoAtalhoUrl('');
+}
+
+function excluirAtalho(id: number) {
+  const atualizados = atalhos.filter((atalho) => atalho.id !== id);
+
+  setAtalhos(atualizados);
+  localStorage.setItem('nook-atalhos', JSON.stringify(atualizados));
+}
   return (
     <main className="app-shell">
       <aside className="sidebar">
@@ -527,9 +592,70 @@ function App() {
                       )}
                     </div>
                   ) : widget.name === 'Atalhos' ? (
-                    <p className="widget-placeholder">
-                      Os atalhos estarão disponíveis em breve.
-                    </p>
+                    <div className="shortcuts-content">
+    <form
+      className="shortcut-form"
+      onSubmit={(event) => {
+        event.preventDefault();
+        adicionarAtalho();
+      }}
+    >
+      <input
+        type="text"
+        value={novoAtalhoNome}
+        onChange={(event) => setNovoAtalhoNome(event.target.value)}
+        placeholder="Nome do atalho"
+        aria-label="Nome do atalho"
+        required
+      />
+
+      <input
+        type="text"
+        value={novoAtalhoUrl}
+        onChange={(event) => setNovoAtalhoUrl(event.target.value)}
+        placeholder="exemplo.com"
+        aria-label="Endereço do site"
+        required
+      />
+
+      <button type="submit" className="shortcut-add">
+        + Adicionar
+      </button>
+    </form>
+
+    {atalhos.length === 0 ? (
+      <p className="shortcut-empty">
+        Seus sites favoritos aparecerão aqui.
+      </p>
+    ) : (
+      <div className="shortcut-list">
+        {atalhos.map((atalho) => (
+          <div className="shortcut-item" key={atalho.id}>
+            <a
+              className="shortcut-link"
+              href={atalho.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={`Abrir ${atalho.nome}`}
+            >
+              <ShortcutIcon url={atalho.url} />
+              <span>{atalho.nome}</span>
+            </a>
+
+            <button
+              type="button"
+              className="shortcut-delete"
+              onClick={() => excluirAtalho(atalho.id)}
+              aria-label={`Excluir ${atalho.nome}`}
+              title="Excluir atalho"
+            >
+              ×
+            </button>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
                   ) : null}
                 </article>
               ))}
@@ -545,5 +671,32 @@ function App() {
     </main>
   );
 }
+function ShortcutIcon({ url }: { url: string }) {
+  const [falhou, setFalhou] = useState(false);
 
+  let dominio = '';
+
+  try {
+    dominio = new URL(url).hostname;
+  } catch {
+    dominio = '';
+  }
+
+  if (falhou || !dominio) {
+    return (
+      <span className="shortcut-icon-fallback" aria-hidden="true">
+        🌐
+      </span>
+    );
+  }
+
+  return (
+    <img
+      className="shortcut-icon"
+      src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(dominio)}&sz=64`}
+      alt=""
+      onError={() => setFalhou(true)}
+    />
+  );
+}
 export default App;
