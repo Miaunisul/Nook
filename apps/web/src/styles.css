@@ -778,3 +778,45 @@ a {
   font-size: 13px;
   line-height: 1.5;
 }
+
+/* Botão para voltar ao Meu espaço */
+.back-to-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 0 0 28px;
+  padding: 11px 16px;
+
+  background: #302d28;
+  border: 1px solid rgba(243, 239, 231, 0.12);
+  border-radius: 10px;
+
+  color: #f3efe7;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.back-to-home:hover {
+  background: rgba(242, 166, 90, 0.1);
+  border-color: #f2a65a;
+  color: #f2a65a;
+  transform: translateX(-3px);
+}
+
+.back-to-home:focus-visible {
+  outline: 2px solid #f2a65a;
+  outline-offset: 3px;
+}
+
+.back-to-home:active {
+  transform: translateX(-1px);
+}
