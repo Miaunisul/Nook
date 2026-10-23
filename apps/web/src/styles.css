@@ -265,6 +265,8 @@ a {
   flex-direction: row;
   align-items: center;
   gap: 18px;
+  min-height: 106px;
+  padding: 20px;
 }
 
 .widget-card-detail {
@@ -1016,12 +1018,12 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 46px;
-  height: 46px;
-  min-width: 58px;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
   flex-shrink: 0;
-  border-radius: 13px;
-  background: rgba(242, 166, 90, 0.13);
+  border-radius: 12px;
+  background: rgba(242, 166, 90, 0.18);
   color: var(--accent);
   transition:
     background 180ms ease,
