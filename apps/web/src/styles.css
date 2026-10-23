@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   color: #f3efe7;
@@ -49,7 +51,7 @@ a {
   display: flex;
   width: 250px;
   flex-direction: column;
-  padding: 30px 20px 22px;
+  padding: 12px 20px 22px;
   border-right: 1px solid var(--border);
   background: #24221e;
 }
@@ -58,14 +60,17 @@ a {
   display: flex;
   align-items: center;
   width: fit-content;
-  margin: 0 0 48px 10px;
+  margin-top: -60px;
+  margin-bottom: 0;
+  gap: 6px;
 }
 
 .brand img {
   display: block;
-  width: 132px;
+  width: 200px;
   height: auto;
   object-fit: contain;
+  transform: translateX(-6px);
 }
 
 .brand span {
@@ -73,7 +78,7 @@ a {
 }
 
 .sidebar-label {
-  margin: 0 0 14px 10px;
+  margin: -60px 0 8px 10px;
   color: #928a7e;
   font-size: 10px;
   font-weight: 700;
@@ -83,7 +88,8 @@ a {
 
 .navigation {
   display: grid;
-  gap: 7px;
+  gap: 5px;
+  margin-top: -35px;
 }
 
 .nav-link {
@@ -201,8 +207,8 @@ a {
   margin: 0;
   color: var(--text);
   font-size: clamp(38px, 4vw, 54px);
-  font-weight: 650;
-  letter-spacing: -2.5px;
+  font-weight: 500;
+  letter-spacing: -1.2px;
   line-height: 1.12;
 }
 
@@ -298,7 +304,8 @@ a {
   margin: 0 0 9px;
   color: var(--text);
   font-size: 17px;
-  font-weight: 650;
+  font-weight: 500;
+  letter-spacing: -0.3px;
 }
 
 .widget-card p {
@@ -342,7 +349,7 @@ a {
 @media (max-width: 760px) {
   .widget-grid {
     grid-template-columns: 1fr;
-
+  }
     .workspace {
   margin-left: 0;
   padding-right: 20px;
@@ -352,7 +359,6 @@ a {
 .sidebar {
   width: 190px;
 }
-  }
 
   .section-heading h2 {
     font-size: 20px;
@@ -1023,7 +1029,7 @@ a {
   min-width: 48px;
   flex-shrink: 0;
   border-radius: 12px;
-  background: rgba(242, 166, 90, 0.18);
+  background: rgba(242, 166, 90, 0.1);
   color: var(--accent);
   transition:
     background 180ms ease,
@@ -1054,4 +1060,22 @@ a {
   flex: 1;
   min-width: 0;
   text-align: left;
+}
+
+.welcome-title {
+  font-weight: 400;
+  letter-spacing: -1.5px;
+  line-height: 1.08;
+}
+
+.gradient-text {
+  background: linear-gradient(
+    90deg,
+   #F07828 0%,
+   #F2A65A 48%,
+   #FFC247 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

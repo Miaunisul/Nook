@@ -255,7 +255,6 @@ function App() {
           <img src="/Nook-Logo.png" alt="Nook" />
         </a>
 
-        <p className="sidebar-label">SUAS SALAS</p>
 
         <nav className="navigation" aria-label="Main navigation">
           <a className="nav-link active" href="#workspace">
@@ -279,23 +278,16 @@ function App() {
       </aside>
 
       <section className="workspace" id="workspace">
-        <header className="topbar">
-          <span className="breadcrumb">Área de trabalho / Visão geral</span>
-          <span className="status">
-            <span className="status-dot" />
-            Pronto para focar
-          </span>
-        </header>
         {paginaAtual === 'home' && (
           <div className="welcome">
             <p className="eyebrow">Olá, dev!</p>
-            <h1>
-              Seu espaço,
-              <br />
-              suas pessoas,
-              <br />
-              seu fluxo.
-            </h1>
+            <h1 className="welcome-title">
+  Seu espaço,
+  <br />
+  suas pessoas,
+  <br />
+  <span className="gradient-text">seu fluxo.</span>
+</h1>
             <p className="welcome-description">
               Organize sua rotina, conecte-se com sua comunidade <br />e faça
               mais do seu dia.
