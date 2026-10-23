@@ -37,16 +37,16 @@ function App() {
   const [pomodoroAtivo, setPomodoroAtivo] = useState(false);
 
   const [novoAtalhoNome, setNovoAtalhoNome] = useState('');
-const [novoAtalhoUrl, setNovoAtalhoUrl] = useState('');
+  const [novoAtalhoUrl, setNovoAtalhoUrl] = useState('');
 
-const [atalhos, setAtalhos] = useState<Atalho[]>(() => {
-  try {
-    const salvos = localStorage.getItem('nook-atalhos');
-    return salvos ? (JSON.parse(salvos) as Atalho[]) : [];
-  } catch {
-    return [];
-  }
-});
+  const [atalhos, setAtalhos] = useState<Atalho[]>(() => {
+    try {
+      const salvos = localStorage.getItem('nook-atalhos');
+      return salvos ? (JSON.parse(salvos) as Atalho[]) : [];
+    } catch {
+      return [];
+    }
+  });
 
   useEffect(() => {
     if (!pomodoroAtivo) return;
@@ -204,53 +204,50 @@ const [atalhos, setAtalhos] = useState<Atalho[]>(() => {
     Atalhos: 'atalhos',
   };
   function adicionarAtalho() {
-  const nome = novoAtalhoNome.trim();
-  const entrada = novoAtalhoUrl.trim();
+    const nome = novoAtalhoNome.trim();
+    const entrada = novoAtalhoUrl.trim();
 
-  if (!nome || !entrada) {
-    return;
+    if (!nome || !entrada) {
+      return;
+    }
+
+    let urlFinal: URL;
+
+    try {
+      const entradaComProtocolo = /^https?:\/\//i.test(entrada)
+        ? entrada
+        : `https://${entrada}`;
+
+      urlFinal = new URL(entradaComProtocolo);
+    } catch {
+      return;
+    }
+
+    if (urlFinal.protocol !== 'http:' && urlFinal.protocol !== 'https:') {
+      return;
+    }
+
+    const novoAtalho: Atalho = {
+      id: Date.now(),
+      nome,
+      url: urlFinal.href,
+    };
+
+    const atualizados = [...atalhos, novoAtalho];
+
+    setAtalhos(atualizados);
+    localStorage.setItem('nook-atalhos', JSON.stringify(atualizados));
+
+    setNovoAtalhoNome('');
+    setNovoAtalhoUrl('');
   }
 
-  let urlFinal: URL;
+  function excluirAtalho(id: number) {
+    const atualizados = atalhos.filter((atalho) => atalho.id !== id);
 
-  try {
-    const entradaComProtocolo = /^https?:\/\//i.test(entrada)
-      ? entrada
-      : `https://${entrada}`;
-
-    urlFinal = new URL(entradaComProtocolo);
-  } catch {
-    return;
+    setAtalhos(atualizados);
+    localStorage.setItem('nook-atalhos', JSON.stringify(atualizados));
   }
-
-  if (
-    urlFinal.protocol !== 'http:' &&
-    urlFinal.protocol !== 'https:'
-  ) {
-    return;
-  }
-
-  const novoAtalho: Atalho = {
-    id: Date.now(),
-    nome,
-    url: urlFinal.href,
-  };
-
-  const atualizados = [...atalhos, novoAtalho];
-
-  setAtalhos(atualizados);
-  localStorage.setItem('nook-atalhos', JSON.stringify(atualizados));
-
-  setNovoAtalhoNome('');
-  setNovoAtalhoUrl('');
-}
-
-function excluirAtalho(id: number) {
-  const atualizados = atalhos.filter((atalho) => atalho.id !== id);
-
-  setAtalhos(atualizados);
-  localStorage.setItem('nook-atalhos', JSON.stringify(atualizados));
-}
   return (
     <main className="app-shell">
       <aside className="sidebar">
@@ -349,12 +346,34 @@ function excluirAtalho(id: number) {
                   className={`widget-card ${paginaAtual === 'home' ? 'widget-card-compact' : 'widget-card-detail'}`}
                   key={widget.number}
                   onClick={() => {
-                  if (paginaAtual === 'home') {
+                    if (paginaAtual === 'home') {
                       setPaginaAtual(paginaDoWidget[widget.name] ?? 'home');
-                   }
-                 }}
+                    }
+                  }}
                 >
-                  <span className="widget-number">{widget.number}</span>
+                  <div className="widget-icon" aria-hidden="true">
+  {widget.name === 'Pomodoro' ? (
+    <svg viewBox="0 0 24 24">
+      <circle cx="12" cy="13" r="8" />
+      <path d="M12 9v4l3 2M9 2h6M12 2v3M19 5l1.5 1.5" />
+    </svg>
+  ) : widget.name === 'Notas rápidas' ? (
+    <svg viewBox="0 0 24 24">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <path d="M14 2v6h6M8 13h8M8 17h6" />
+    </svg>
+  ) : widget.name === 'Tasks' ? (
+    <svg viewBox="0 0 24 24">
+      <rect x="4" y="4" width="16" height="16" rx="3" />
+      <path d="m8 12 3 3 5-6" />
+    </svg>
+  ) : (
+    <svg viewBox="0 0 24 24">
+      <path d="M10 13a5 5 0 0 0 7.1 0l3-3A5 5 0 0 0 13 2.9l-1.7 1.7" />
+      <path d="M14 11a5 5 0 0 0-7.1 0l-3 3A5 5 0 0 0 11 21.1l1.7-1.7" />
+    </svg>
+  )}
+</div>
                   <div>
                     <h3>{widget.name}</h3>
                     <p>{widget.description}</p>
@@ -593,69 +612,73 @@ function excluirAtalho(id: number) {
                     </div>
                   ) : widget.name === 'Atalhos' ? (
                     <div className="shortcuts-content">
-    <form
-      className="shortcut-form"
-      onSubmit={(event) => {
-        event.preventDefault();
-        adicionarAtalho();
-      }}
-    >
-      <input
-        type="text"
-        value={novoAtalhoNome}
-        onChange={(event) => setNovoAtalhoNome(event.target.value)}
-        placeholder="Nome do atalho"
-        aria-label="Nome do atalho"
-        required
-      />
+                      <form
+                        className="shortcut-form"
+                        onSubmit={(event) => {
+                          event.preventDefault();
+                          adicionarAtalho();
+                        }}
+                      >
+                        <input
+                          type="text"
+                          value={novoAtalhoNome}
+                          onChange={(event) =>
+                            setNovoAtalhoNome(event.target.value)
+                          }
+                          placeholder="Nome do atalho"
+                          aria-label="Nome do atalho"
+                          required
+                        />
 
-      <input
-        type="text"
-        value={novoAtalhoUrl}
-        onChange={(event) => setNovoAtalhoUrl(event.target.value)}
-        placeholder="exemplo.com"
-        aria-label="Endereço do site"
-        required
-      />
+                        <input
+                          type="text"
+                          value={novoAtalhoUrl}
+                          onChange={(event) =>
+                            setNovoAtalhoUrl(event.target.value)
+                          }
+                          placeholder="exemplo.com"
+                          aria-label="Endereço do site"
+                          required
+                        />
 
-      <button type="submit" className="shortcut-add">
-        + Adicionar
-      </button>
-    </form>
+                        <button type="submit" className="shortcut-add">
+                          + Adicionar
+                        </button>
+                      </form>
 
-    {atalhos.length === 0 ? (
-      <p className="shortcut-empty">
-        Seus sites favoritos aparecerão aqui.
-      </p>
-    ) : (
-      <div className="shortcut-list">
-        {atalhos.map((atalho) => (
-          <div className="shortcut-item" key={atalho.id}>
-            <a
-              className="shortcut-link"
-              href={atalho.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              title={`Abrir ${atalho.nome}`}
-            >
-              <ShortcutIcon url={atalho.url} />
-              <span>{atalho.nome}</span>
-            </a>
+                      {atalhos.length === 0 ? (
+                        <p className="shortcut-empty">
+                          Seus sites favoritos aparecerão aqui.
+                        </p>
+                      ) : (
+                        <div className="shortcut-list">
+                          {atalhos.map((atalho) => (
+                            <div className="shortcut-item" key={atalho.id}>
+                              <a
+                                className="shortcut-link"
+                                href={atalho.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={`Abrir ${atalho.nome}`}
+                              >
+                                <ShortcutIcon url={atalho.url} />
+                                <span>{atalho.nome}</span>
+                              </a>
 
-            <button
-              type="button"
-              className="shortcut-delete"
-              onClick={() => excluirAtalho(atalho.id)}
-              aria-label={`Excluir ${atalho.nome}`}
-              title="Excluir atalho"
-            >
-              ×
-            </button>
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
+                              <button
+                                type="button"
+                                className="shortcut-delete"
+                                onClick={() => excluirAtalho(atalho.id)}
+                                aria-label={`Excluir ${atalho.nome}`}
+                                title="Excluir atalho"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ) : null}
                 </article>
               ))}

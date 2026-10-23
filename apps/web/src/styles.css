@@ -244,6 +244,10 @@ a {
 
 .widget-card {
   position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 18px;
   min-height: 190px;
   padding: 24px;
   overflow: hidden;
@@ -293,6 +297,10 @@ a {
   color: var(--muted);
   font-size: 18px;
   transition: color 180ms ease, transform 180ms ease;
+}
+
+.widget-card:hover .widget-arrow {
+  transform: translate(2px, -2px);
 }
 
 .widget-card:hover .widget-arrow {
@@ -983,4 +991,48 @@ a {
   .shortcut-list {
     grid-template-columns: 1fr;
   }
+}
+
+
+/* Ícones dos widgets */
+.widget-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  min-width: 58px;
+  flex-shrink: 0;
+  border-radius: 13px;
+  background: rgba(242, 166, 90, 0.13);
+  color: var(--accent);
+  transition:
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.widget-icon svg {
+  width: 30px;
+  height: 30px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.widget-card:hover .widget-icon {
+  background: rgba(242, 166, 90, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Seta sempre laranja */
+.widget-arrow {
+  color: var(--accent);
+}
+
+.widget-card > div:not(.widget-icon) {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
 }
