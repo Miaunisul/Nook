@@ -224,30 +224,53 @@ function App() {
             Pronto para focar
           </span>
         </header>
-
-        <div className="welcome">
-          <p className="eyebrow">Olá, dev!</p>
-          <h1>
-            Seu espaço,
-            <br />
-            suas pessoas,
-            <br />
-            seu fluxo.
-          </h1>
-          <p className="welcome-description">
-            Organize sua rotina, conecte-se com sua comunidade <br />e faça mais
-            do seu dia.
-          </p>
-        </div>
+        {paginaAtual === 'home' && (
+          <div className="welcome">
+            <p className="eyebrow">Olá, dev!</p>
+            <h1>
+              Seu espaço,
+              <br />
+              suas pessoas,
+              <br />
+              seu fluxo.
+            </h1>
+            <p className="welcome-description">
+              Organize sua rotina, conecte-se com sua comunidade <br />e faça
+              mais do seu dia.
+            </p>
+          </div>
+        )}
 
         <section className="widget-section" aria-labelledby="widgets-title">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">SEU ESPAÇO</p>
-              <h2 id="widgets-title">Área de trabalho</h2>
+              <p className="eyebrow">
+                {paginaAtual === 'home' ? 'SEU ESPAÇO' : 'FERRAMENTA'}
+              </p>
+
+              <h2 id="widgets-title">
+                {paginaAtual === 'home'
+                  ? 'Área de trabalho'
+                  : widgets.find(
+                      (widget) => paginaDoWidget[widget.name] === paginaAtual,
+                    )?.name}
+              </h2>
             </div>
-            <span className="widget-count">04 WIDGETS</span>
+
+            {paginaAtual === 'home' && (
+              <span className="widget-count">04 WIDGETS</span>
+            )}
           </div>
+
+          {paginaAtual !== 'home' && (
+            <button
+              type="button"
+              className="back-to-home"
+              onClick={() => setPaginaAtual('home')}
+            >
+              ← Voltar ao meu espaço
+            </button>
+          )}
 
           <div className="widget-grid">
             {widgets
@@ -258,20 +281,24 @@ function App() {
               )
               .map((widget) => (
                 <article
-                  className="widget-card"
+                  className={`widget-card ${paginaAtual === 'home' ? 'widget-card-compact' : 'widget-card-detail'}`}
                   key={widget.number}
                   onClick={() => {
-                    if (paginaAtual === 'home') {
+                  if (paginaAtual === 'home') {
                       setPaginaAtual(paginaDoWidget[widget.name] ?? 'home');
-                    }
-                  }}
+                   }
+                 }}
                 >
                   <span className="widget-number">{widget.number}</span>
                   <div>
                     <h3>{widget.name}</h3>
                     <p>{widget.description}</p>
                   </div>
-                  {paginaAtual !== 'home' && widget.name === 'Pomodoro' ? (
+                  {paginaAtual === 'home' ? (
+                    <span className="widget-arrow" aria-hidden="true">
+                      ↗
+                    </span>
+                  ) : widget.name === 'Pomodoro' ? (
                     <div className="pomodoro">
                       <div className="pomodoro-timer">
                         {String(pomodoroMinutos).padStart(2, '0')}:
@@ -508,11 +535,12 @@ function App() {
               ))}
           </div>
         </section>
-
-        <footer className="workspace-footer">
-          <span>NOOK — Fase inicial,</span>
-          <span> crie um canto para o que importa.</span>
-        </footer>
+        {paginaAtual === 'home' && (
+          <footer className="workspace-footer">
+            <span>NOOK — Fase inicial,</span>
+            <span> crie um canto para o que importa.</span>
+          </footer>
+        )}
       </section>
     </main>
   );
