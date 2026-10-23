@@ -260,6 +260,23 @@ a {
     background 180ms ease;
 }
 
+.widget-card-compact {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 18px;
+}
+
+.widget-card-detail {
+  display: block;
+}
+
+.widget-card-detail > .widget-icon,
+.widget-card-detail > .widget-number,
+.widget-card-detail > .widget-arrow {
+  display: none;
+}
+
 .widget-card:hover {
   transform: translateY(-3px);
   border-color: rgba(242, 166, 90, 0.45);
