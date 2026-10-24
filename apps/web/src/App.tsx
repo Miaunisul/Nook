@@ -309,19 +309,25 @@ function App() {
 
         <section className="widget-section" aria-labelledby="widgets-title">
           <div className="section-heading">
-            <div>
-              <p className="eyebrow">
-                {paginaAtual === 'home' ? 'SEU ESPAÇO' : 'FERRAMENTA'}
-              </p>
-
-              <h2 id="widgets-title">
-                {paginaAtual === 'home'
-                  ? 'Área de trabalho'
-                  : widgets.find(
-                      (widget) => paginaDoWidget[widget.name] === paginaAtual,
-                    )?.name}
-              </h2>
-            </div>
+           <div>
+  {paginaAtual === 'home' ? (
+    <>
+      <h2 id="widgets-title">Seu espaço</h2>
+      <p className="section-description">
+        Ferramentas e atalhos para o seu dia.
+      </p>
+    </>
+  ) : (
+    <>
+      <p className="eyebrow">FERRAMENTA</p>
+      <h2 id="widgets-title">
+        {widgets.find(
+          (widget) => paginaDoWidget[widget.name] === paginaAtual,
+        )?.name}
+      </h2>
+    </>
+  )}
+</div>
 
             {paginaAtual === 'home' && (
               <span className="widget-count">04 WIDGETS</span>
