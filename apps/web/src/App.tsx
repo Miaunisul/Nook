@@ -279,6 +279,13 @@ function App() {
 
       <section className="workspace" id="workspace">
         {paginaAtual === 'home' && (
+          <div className="hero">
+    <img
+      className="hero-symbol"
+      src="/Nook-Logo-Sybol.png"
+      alt=""
+      aria-hidden="true"
+    />
           <div className="welcome">
             <p className="eyebrow">Olá, dev!</p>
             <h1 className="welcome-title">
@@ -293,7 +300,12 @@ function App() {
               mais do seu dia.
             </p>
           </div>
-        )}
+            </div>
+
+)}
+{paginaAtual === 'home' && (
+        <div className="hero-divider" aria-hidden="true" />
+      )}
 
         <section className="widget-section" aria-labelledby="widgets-title">
           <div className="section-heading">
