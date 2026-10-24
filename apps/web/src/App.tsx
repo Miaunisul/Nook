@@ -255,7 +255,6 @@ function App() {
           <img src="/Nook-Logo.png" alt="Nook" />
         </a>
 
-
         <nav className="navigation" aria-label="Main navigation">
           <a className="nav-link active" href="#workspace">
             <span>◫</span> Meu espaço
@@ -280,54 +279,55 @@ function App() {
       <section className="workspace" id="workspace">
         {paginaAtual === 'home' && (
           <div className="hero">
-    <img
-      className="hero-symbol"
-      src="/Nook-Logo-Sybol.png"
-      alt=""
-      aria-hidden="true"
-    />
-          <div className="welcome">
-            <p className="eyebrow">Olá, dev!</p>
-            <h1 className="welcome-title">
-  Seu espaço,
-  <br />
-  suas pessoas,
-  <br />
-  <span className="gradient-text">seu fluxo.</span>
-</h1>
-            <p className="welcome-description">
-              Organize sua rotina, conecte-se com sua comunidade <br />e faça
-              mais do seu dia.
-            </p>
-          </div>
+            <img
+              className="hero-symbol"
+              src="/Nook-Logo-Sybol.png"
+              alt=""
+              aria-hidden="true"
+            />
+            <div className="welcome">
+              <p className="eyebrow">Olá, dev!</p>
+              <h1 className="welcome-title">
+                Seu espaço,
+                <br />
+                suas pessoas,
+                <br />
+                <span className="gradient-text">seu fluxo.</span>
+              </h1>
+              <p className="welcome-description">
+                Organize sua rotina, conecte-se com sua comunidade <br />e faça
+                mais do seu dia.
+              </p>
             </div>
-
-)}
-{paginaAtual === 'home' && (
-        <div className="hero-divider" aria-hidden="true" />
-      )}
+          </div>
+        )}
+        {paginaAtual === 'home' && (
+          <div className="hero-divider" aria-hidden="true" />
+        )}
 
         <section className="widget-section" aria-labelledby="widgets-title">
           <div className="section-heading">
-           <div>
-  {paginaAtual === 'home' ? (
-    <>
-      <h2 id="widgets-title">Seu espaço</h2>
-      <p className="section-description">
-        Ferramentas e atalhos para o seu dia.
-      </p>
-    </>
-  ) : (
-    <>
-      <p className="eyebrow">FERRAMENTA</p>
-      <h2 id="widgets-title">
-        {widgets.find(
-          (widget) => paginaDoWidget[widget.name] === paginaAtual,
-        )?.name}
-      </h2>
-    </>
-  )}
-</div>
+            <div>
+              {paginaAtual === 'home' ? (
+                <>
+                  <h2 id="widgets-title">Seu espaço</h2>
+                  <p className="section-description">
+                    Ferramentas e atalhos para o seu dia.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="eyebrow">FERRAMENTA</p>
+                  <h2 id="widgets-title">
+                    {
+                      widgets.find(
+                        (widget) => paginaDoWidget[widget.name] === paginaAtual,
+                      )?.name
+                    }
+                  </h2>
+                </>
+              )}
+            </div>
 
             {paginaAtual === 'home' && (
               <span className="widget-count">04 WIDGETS</span>
@@ -362,28 +362,28 @@ function App() {
                   }}
                 >
                   <div className="widget-icon" aria-hidden="true">
-  {widget.name === 'Pomodoro' ? (
-    <svg viewBox="0 0 24 24">
-      <circle cx="12" cy="13" r="8" />
-      <path d="M12 9v4l3 2M9 2h6M12 2v3M19 5l1.5 1.5" />
-    </svg>
-  ) : widget.name === 'Notas rápidas' ? (
-    <svg viewBox="0 0 24 24">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-      <path d="M14 2v6h6M8 13h8M8 17h6" />
-    </svg>
-  ) : widget.name === 'Tasks' ? (
-    <svg viewBox="0 0 24 24">
-      <rect x="4" y="4" width="16" height="16" rx="3" />
-      <path d="m8 12 3 3 5-6" />
-    </svg>
-  ) : (
-    <svg viewBox="0 0 24 24">
-      <path d="M10 13a5 5 0 0 0 7.1 0l3-3A5 5 0 0 0 13 2.9l-1.7 1.7" />
-      <path d="M14 11a5 5 0 0 0-7.1 0l-3 3A5 5 0 0 0 11 21.1l1.7-1.7" />
-    </svg>
-  )}
-</div>
+                    {widget.name === 'Pomodoro' ? (
+                      <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="13" r="8" />
+                        <path d="M12 9v4l3 2M9 2h6M12 2v3M19 5l1.5 1.5" />
+                      </svg>
+                    ) : widget.name === 'Notas rápidas' ? (
+                      <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <path d="M14 2v6h6M8 13h8M8 17h6" />
+                      </svg>
+                    ) : widget.name === 'Tasks' ? (
+                      <svg viewBox="0 0 24 24">
+                        <rect x="4" y="4" width="16" height="16" rx="3" />
+                        <path d="m8 12 3 3 5-6" />
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24">
+                        <path d="M10 13a5 5 0 0 0 7.1 0l3-3A5 5 0 0 0 13 2.9l-1.7 1.7" />
+                        <path d="M14 11a5 5 0 0 0-7.1 0l-3 3A5 5 0 0 0 11 21.1l1.7-1.7" />
+                      </svg>
+                    )}
+                  </div>
                   <div>
                     <h3>{widget.name}</h3>
                     <p>{widget.description}</p>
