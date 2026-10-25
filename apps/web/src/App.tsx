@@ -274,14 +274,25 @@ function App() {
 {paginaAtual === 'pomodoro' && (
   <div className="pomodoro-page">
     <div className="pomodoro-page-actions">
+      <div className="pomodoro-page-heading"></div>
       <button
         type="button"
         className="pomodoro-back"
         onClick={() => setPaginaAtual('home')}
+        aria-label="Voltar ao meu espaço"
       >
         ← Voltar
       </button>
     </div>
+    <button
+    type="button"
+    className="pomodoro-fullscreen"
+    disabled
+    title="Disponível na próxima etapa"
+  >
+    ⛶ Tela cheia
+  </button>
+
 
     <PomodoroView
       session={pomodoro}
