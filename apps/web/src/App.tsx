@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { usePomodoro } from './features/pomodoro/usePomodoro';
+import { PomodoroView } from './features/pomodoro/PomodoroView';
 
 const widgets = [
   {
@@ -40,10 +41,6 @@ function App() {
   reset: reiniciarPomodoro,
   changeMode: alterarModoPomodoro,
 } = usePomodoro();
-
-const pomodoroMinutos = Math.floor(pomodoro.remainingSeconds / 60);
-const pomodoroSegundos = pomodoro.remainingSeconds % 60;
-const pomodoroAtivo = pomodoro.status === 'running';
 
   const [novoAtalhoNome, setNovoAtalhoNome] = useState('');
   const [novoAtalhoUrl, setNovoAtalhoUrl] = useState('');
@@ -361,60 +358,15 @@ const pomodoroAtivo = pomodoro.status === 'running';
                     <span className="widget-arrow" aria-hidden="true">
                       ↗
                     </span>
-                  ) : widget.name === 'Pomodoro' ? (
-                      <div className="pomodoro">
-  <div className="pomodoro-modes">
-    <button
-      type="button"
-      onClick={() => alterarModoPomodoro('focus')}
-      aria-pressed={pomodoro.mode === 'focus'}
-    >
-      Foco
-    </button>
+                    ) : widget.name === 'Pomodoro' ? (
+                      <PomodoroView
+                      session={pomodoro}
+                      onStart={iniciarPomodoro}
+                      onPause={pausarPomodoro}
+                      onReset={reiniciarPomodoro}
+                      onChangeMode={alterarModoPomodoro}
+                    />
 
-    <button
-      type="button"
-      onClick={() => alterarModoPomodoro('shortBreak')}
-      aria-pressed={pomodoro.mode === 'shortBreak'}
-    >
-      Pausa curta
-    </button>
-
-    <button
-      type="button"
-      onClick={() => alterarModoPomodoro('longBreak')}
-      aria-pressed={pomodoro.mode === 'longBreak'}
-    >
-      Pausa longa
-    </button>
-  </div>
-
-
-                      <div className="pomodoro-timer">
-                        {String(pomodoroMinutos).padStart(2, '0')}:
-                        {String(pomodoroSegundos).padStart(2, '0')}
-                      </div>
-
-                      <div className="pomodoro-controls">
-                        {pomodoroAtivo ? (
-                          <button type="button" onClick={pausarPomodoro}>
-                            Pausar
-                          </button>
-                        ) : (
-                          <button type="button" onClick={iniciarPomodoro}>
-                            Iniciar foco
-                          </button>
-                        )}
-
-                        <button
-                          className="pomodoro-reset"
-                          type="button"
-                          onClick={reiniciarPomodoro}
-                        >
-                          Reiniciar
-                        </button>
-                      </div>
-                    </div>
                   ) : widget.name === 'Notas rápidas' ? (
                     <div className="quick-notes">
                       <form
