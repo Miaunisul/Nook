@@ -39,14 +39,6 @@ const progress = Math.min(
 );
   return (
     <div className="pomodoro-view">
-      <div className="pomodoro-view-header">
-        <div>
-          <span className="pomodoro-view-eyebrow">SEU MOMENTO DE FOCO</span>
-          <h2>Encontre seu ritmo.</h2>
-          <p>Uma tarefa de cada vez.</p>
-        </div>
-      </div>
-
       <div className="pomodoro-view-content">
         <div className="pomodoro-view-modes">
           {modes.map((mode) => (
