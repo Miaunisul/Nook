@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { usePomodoro } from './features/pomodoro/usePomodoro';
 
 const widgets = [
   {
@@ -32,9 +33,17 @@ type Atalho = {
 
 function App() {
   const [paginaAtual, setPaginaAtual] = useState<Pagina>('home');
-  const [pomodoroMinutos, setPomodoroMinutos] = useState(25);
-  const [pomodoroSegundos, setPomodoroSegundos] = useState(0);
-  const [pomodoroAtivo, setPomodoroAtivo] = useState(false);
+  const {
+  session: pomodoro,
+  start: iniciarPomodoro,
+  pause: pausarPomodoro,
+  reset: reiniciarPomodoro,
+  changeMode: alterarModoPomodoro,
+} = usePomodoro();
+
+const pomodoroMinutos = Math.floor(pomodoro.remainingSeconds / 60);
+const pomodoroSegundos = pomodoro.remainingSeconds % 60;
+const pomodoroAtivo = pomodoro.status === 'running';
 
   const [novoAtalhoNome, setNovoAtalhoNome] = useState('');
   const [novoAtalhoUrl, setNovoAtalhoUrl] = useState('');
@@ -47,46 +56,6 @@ function App() {
       return [];
     }
   });
-
-  useEffect(() => {
-    if (!pomodoroAtivo) return;
-
-    const intervalo = window.setInterval(() => {
-      if (pomodoroMinutos === 0 && pomodoroSegundos === 0) {
-        setPomodoroAtivo(false);
-        return;
-      }
-
-      if (pomodoroSegundos === 0) {
-        setPomodoroMinutos((minutos) => minutos - 1);
-        setPomodoroSegundos(59);
-        return;
-      }
-
-      setPomodoroSegundos((segundos) => segundos - 1);
-    }, 1000);
-
-    return () => window.clearInterval(intervalo);
-  }, [pomodoroAtivo, pomodoroMinutos, pomodoroSegundos]);
-
-  function iniciarPomodoro() {
-    if (pomodoroMinutos === 0 && pomodoroSegundos === 0) {
-      setPomodoroMinutos(25);
-      setPomodoroSegundos(0);
-    }
-
-    setPomodoroAtivo(true);
-  }
-
-  function pausarPomodoro() {
-    setPomodoroAtivo(false);
-  }
-
-  function reiniciarPomodoro() {
-    setPomodoroAtivo(false);
-    setPomodoroMinutos(25);
-    setPomodoroSegundos(0);
-  }
 
   const [nota, setNota] = useState('');
   const [notaParaExcluir, setNotaParaExcluir] = useState<number | null>(null);
@@ -393,7 +362,34 @@ function App() {
                       ↗
                     </span>
                   ) : widget.name === 'Pomodoro' ? (
-                    <div className="pomodoro">
+                      <div className="pomodoro">
+  <div className="pomodoro-modes">
+    <button
+      type="button"
+      onClick={() => alterarModoPomodoro('focus')}
+      aria-pressed={pomodoro.mode === 'focus'}
+    >
+      Foco
+    </button>
+
+    <button
+      type="button"
+      onClick={() => alterarModoPomodoro('shortBreak')}
+      aria-pressed={pomodoro.mode === 'shortBreak'}
+    >
+      Pausa curta
+    </button>
+
+    <button
+      type="button"
+      onClick={() => alterarModoPomodoro('longBreak')}
+      aria-pressed={pomodoro.mode === 'longBreak'}
+    >
+      Pausa longa
+    </button>
+  </div>
+
+
                       <div className="pomodoro-timer">
                         {String(pomodoroMinutos).padStart(2, '0')}:
                         {String(pomodoroSegundos).padStart(2, '0')}
