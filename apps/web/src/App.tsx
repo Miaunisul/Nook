@@ -286,7 +286,7 @@ function App() {
               aria-hidden="true"
             />
             <div className="welcome">
-              <p className="eyebrow">Olá, dev!</p>
+              <p className="eyebrow">Olá, programador!</p>
               <h1 className="welcome-title">
                 Seu espaço,
                 <br />
