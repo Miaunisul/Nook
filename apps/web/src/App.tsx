@@ -271,6 +271,29 @@ function App() {
           <div className="hero-divider" aria-hidden="true" />
         )}
 
+{paginaAtual === 'pomodoro' && (
+  <div className="pomodoro-page">
+    <div className="pomodoro-page-actions">
+      <button
+        type="button"
+        className="pomodoro-back"
+        onClick={() => setPaginaAtual('home')}
+      >
+        ← Voltar
+      </button>
+    </div>
+
+    <PomodoroView
+      session={pomodoro}
+      onStart={iniciarPomodoro}
+      onPause={pausarPomodoro}
+      onReset={reiniciarPomodoro}
+      onChangeMode={alterarModoPomodoro}
+    />
+  </div>
+)}
+
+        {paginaAtual !== 'pomodoro' && (
         <section className="widget-section" aria-labelledby="widgets-title">
           <div className="section-heading">
             <div>
@@ -358,14 +381,6 @@ function App() {
                     <span className="widget-arrow" aria-hidden="true">
                       ↗
                     </span>
-                    ) : widget.name === 'Pomodoro' ? (
-                      <PomodoroView
-                      session={pomodoro}
-                      onStart={iniciarPomodoro}
-                      onPause={pausarPomodoro}
-                      onReset={reiniciarPomodoro}
-                      onChangeMode={alterarModoPomodoro}
-                    />
 
                   ) : widget.name === 'Notas rápidas' ? (
                     <div className="quick-notes">
@@ -642,6 +657,7 @@ function App() {
               ))}
           </div>
         </section>
+         )}
         {paginaAtual === 'home' && (
           <footer className="workspace-footer">
             <span>NOOK — Fase inicial,</span>

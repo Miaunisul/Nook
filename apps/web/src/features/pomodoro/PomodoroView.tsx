@@ -87,13 +87,6 @@ export function PomodoroView({
           </button>
         </div>
       </div>
-
-      <div className="pomodoro-view-footer">
-        <span>Seu tempo, seu ritmo.</span>
-        <span>
-          {session.completedFocusSessions} sessões de foco concluídas
-        </span>
-      </div>
     </div>
   );
 }
