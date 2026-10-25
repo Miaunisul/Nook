@@ -26,6 +26,17 @@ export function PomodoroView({
   const seconds = session.remainingSeconds % 60;
   const isRunning = session.status === 'running';
 
+  const totalSeconds =
+  session.mode === 'focus'
+    ? 25 * 60
+    : session.mode === 'shortBreak'
+      ? 5 * 60
+      : 15 * 60;
+
+const progress = Math.min(
+  100,
+  Math.max(0, ((totalSeconds - session.remainingSeconds) / totalSeconds) * 100),
+);
   return (
     <div className="pomodoro-view">
       <div className="pomodoro-view-header">
@@ -51,21 +62,53 @@ export function PomodoroView({
           ))}
         </div>
 
-        <div className="pomodoro-view-clock">
-          <span className="pomodoro-view-time">
-            {String(minutes).padStart(2, '0')}:
-            {String(seconds).padStart(2, '0')}
-          </span>
-          <span className="pomodoro-view-status">
-            {isRunning
-              ? 'Mantenha o foco'
-              : session.status === 'paused'
-                ? 'Sessão pausada'
-                : session.status === 'completed'
-                  ? 'Sessão concluída'
-                  : 'Pronto para começar'}
-          </span>
-        </div>
+
+<div
+  className="pomodoro-view-clock"
+  role="progressbar"
+  aria-label="Progresso da sessão Pomodoro"
+  aria-valuemin={0}
+  aria-valuemax={100}
+  aria-valuenow={Math.round(progress)}
+>
+  <svg
+    className="pomodoro-progress-ring"
+    viewBox="0 0 100 100"
+    aria-hidden="true"
+  >
+    <circle
+      className="pomodoro-progress-track"
+      cx="50"
+      cy="50"
+      r="47"
+    />
+    <circle
+      className="pomodoro-progress-fill"
+      cx="50"
+      cy="50"
+      r="47"
+      pathLength="100"
+      strokeDasharray="100"
+      strokeDashoffset={100 - progress}
+    />
+  </svg>
+
+  <span className="pomodoro-view-time">
+    {String(minutes).padStart(2, '0')}:
+    {String(seconds).padStart(2, '0')}
+  </span>
+
+  <span className="pomodoro-view-status">
+    {isRunning
+      ? 'Mantenha o foco'
+      : session.status === 'paused'
+        ? 'Sessão pausada'
+        : session.status === 'completed'
+          ? 'Sessão concluída'
+          : 'Pronto para começar'}
+  </span>
+</div>
+
 
         <div className="pomodoro-view-controls">
           <button

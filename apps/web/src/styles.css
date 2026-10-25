@@ -1572,3 +1572,45 @@ a {
     gap: 14px;
   }
 }
+
+
+.pomodoro-page .pomodoro-view-clock {
+  position: relative;
+  isolation: isolate;
+  border: none;
+  background: #211d1b;
+  backdrop-filter: none;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.pomodoro-progress-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.pomodoro-progress-track,
+.pomodoro-progress-fill {
+  fill: none;
+  stroke-width: 2;
+}
+
+.pomodoro-progress-track {
+  stroke: rgba(243, 239, 231, 0.25);
+}
+
+.pomodoro-progress-fill {
+  stroke: #f2a65a;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.4s linear;
+}
+
+.pomodoro-view-time,
+.pomodoro-view-status {
+  position: relative;
+  z-index: 1;
+}
