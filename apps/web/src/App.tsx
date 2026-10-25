@@ -34,13 +34,14 @@ type Atalho = {
 
 function App() {
   const [paginaAtual, setPaginaAtual] = useState<Pagina>('home');
+  const [pomodoroTelaCheia, setPomodoroTelaCheia] = useState(false);
   const {
-  session: pomodoro,
-  start: iniciarPomodoro,
-  pause: pausarPomodoro,
-  reset: reiniciarPomodoro,
-  changeMode: alterarModoPomodoro,
-} = usePomodoro();
+    session: pomodoro,
+    start: iniciarPomodoro,
+    pause: pausarPomodoro,
+    reset: reiniciarPomodoro,
+    changeMode: alterarModoPomodoro,
+  } = usePomodoro();
 
   const [novoAtalhoNome, setNovoAtalhoNome] = useState('');
   const [novoAtalhoUrl, setNovoAtalhoUrl] = useState('');
@@ -215,7 +216,11 @@ function App() {
     localStorage.setItem('nook-atalhos', JSON.stringify(atualizados));
   }
   return (
-    <main className="app-shell">
+    <main
+      className={
+        pomodoroTelaCheia ? 'app-shell pomodoro-fullscreen-active' : 'app-shell'
+      }
+    >
       <aside className="sidebar">
         <a className="brand" href="/" aria-label="Nook home">
           <img src="/Nook-Logo.png" alt="Nook" />
@@ -271,281 +276,168 @@ function App() {
           <div className="hero-divider" aria-hidden="true" />
         )}
 
-{paginaAtual === 'pomodoro' && (
-  <div className="pomodoro-page">
-    <div className="pomodoro-page-actions">
-      <div className="pomodoro-page-heading">
-      <button
-        type="button"
-        className="pomodoro-back"
-        onClick={() => setPaginaAtual('home')}
-        aria-label="Voltar ao meu espaço"
-      >
-        ←
-      </button>
-      <span>Pomodoro</span>
-    </div>
+        {paginaAtual === 'pomodoro' && (
+          <div className="pomodoro-page">
+            <div className="pomodoro-page-actions">
+              <div className="pomodoro-page-heading">
+                <button
+                  type="button"
+                  className="pomodoro-back"
+                  onClick={() => {
+                    setPomodoroTelaCheia(false);
+                    setPaginaAtual('home');
+                  }}
+                >
+                  ←
+                </button>
+                <span>Pomodoro</span>
+              </div>
 
-    <button
-    type="button"
-    className="pomodoro-fullscreen"
-    disabled
-    title="Disponível na próxima etapa"
-  >
-    ⛶ Tela cheia
-  </button>
-      </div>
+              <button
+                type="button"
+                className="pomodoro-fullscreen"
+                onClick={() => {
+                  console.log('Tela cheia clicada!', !pomodoroTelaCheia);
+                  setPomodoroTelaCheia((atual) => !atual);
+                }}
+              >
+                {pomodoroTelaCheia ? '⛶ Sair da tela cheia' : '⛶ Tela cheia'}
+              </button>
+            </div>
 
-    <PomodoroView
-      session={pomodoro}
-      onStart={iniciarPomodoro}
-      onPause={pausarPomodoro}
-      onReset={reiniciarPomodoro}
-      onChangeMode={alterarModoPomodoro}
-    />
-  </div>
-)}
+            <PomodoroView
+              session={pomodoro}
+              onStart={iniciarPomodoro}
+              onPause={pausarPomodoro}
+              onReset={reiniciarPomodoro}
+              onChangeMode={alterarModoPomodoro}
+            />
+          </div>
+        )}
 
         {paginaAtual !== 'pomodoro' && (
-        <section className="widget-section" aria-labelledby="widgets-title">
-          <div className="section-heading">
-            <div>
-              {paginaAtual === 'home' ? (
-                <>
-                  <h2 id="widgets-title">Seu espaço</h2>
-                  <p className="section-description">
-                    Ferramentas e atalhos para o seu dia.
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p className="eyebrow">FERRAMENTA</p>
-                  <h2 id="widgets-title">
-                    {
-                      widgets.find(
-                        (widget) => paginaDoWidget[widget.name] === paginaAtual,
-                      )?.name
-                    }
-                  </h2>
-                </>
+          <section className="widget-section" aria-labelledby="widgets-title">
+            <div className="section-heading">
+              <div>
+                {paginaAtual === 'home' ? (
+                  <>
+                    <h2 id="widgets-title">Seu espaço</h2>
+                    <p className="section-description">
+                      Ferramentas e atalhos para o seu dia.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="eyebrow">FERRAMENTA</p>
+                    <h2 id="widgets-title">
+                      {
+                        widgets.find(
+                          (widget) =>
+                            paginaDoWidget[widget.name] === paginaAtual,
+                        )?.name
+                      }
+                    </h2>
+                  </>
+                )}
+              </div>
+
+              {paginaAtual === 'home' && (
+                <span className="widget-count">04 WIDGETS</span>
               )}
             </div>
 
-            {paginaAtual === 'home' && (
-              <span className="widget-count">04 WIDGETS</span>
+            {paginaAtual !== 'home' && (
+              <button
+                type="button"
+                className="back-to-home"
+                onClick={() => setPaginaAtual('home')}
+              >
+                ← Voltar ao meu espaço
+              </button>
             )}
-          </div>
 
-          {paginaAtual !== 'home' && (
-            <button
-              type="button"
-              className="back-to-home"
-              onClick={() => setPaginaAtual('home')}
-            >
-              ← Voltar ao meu espaço
-            </button>
-          )}
-
-          <div className="widget-grid">
-            {widgets
-              .filter(
-                (widget) =>
-                  paginaAtual === 'home' ||
-                  paginaDoWidget[widget.name] === paginaAtual,
-              )
-              .map((widget) => (
-                <article
-                  className={`widget-card ${paginaAtual === 'home' ? 'widget-card-compact' : 'widget-card-detail'}`}
-                  key={widget.number}
-                  onClick={() => {
-                    if (paginaAtual === 'home') {
-                      setPaginaAtual(paginaDoWidget[widget.name] ?? 'home');
-                    }
-                  }}
-                >
-                  <div className="widget-icon" aria-hidden="true">
-                    {widget.name === 'Pomodoro' ? (
-                      <svg viewBox="0 0 24 24">
-                        <circle cx="12" cy="13" r="8" />
-                        <path d="M12 9v4l3 2M9 2h6M12 2v3M19 5l1.5 1.5" />
-                      </svg>
-                    ) : widget.name === 'Notas rápidas' ? (
-                      <svg viewBox="0 0 24 24">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                        <path d="M14 2v6h6M8 13h8M8 17h6" />
-                      </svg>
-                    ) : widget.name === 'Tasks' ? (
-                      <svg viewBox="0 0 24 24">
-                        <rect x="4" y="4" width="16" height="16" rx="3" />
-                        <path d="m8 12 3 3 5-6" />
-                      </svg>
-                    ) : (
-                      <svg viewBox="0 0 24 24">
-                        <path d="M10 13a5 5 0 0 0 7.1 0l3-3A5 5 0 0 0 13 2.9l-1.7 1.7" />
-                        <path d="M14 11a5 5 0 0 0-7.1 0l-3 3A5 5 0 0 0 11 21.1l1.7-1.7" />
-                      </svg>
-                    )}
-                  </div>
-                  <div>
-                    <h3>{widget.name}</h3>
-                    <p>{widget.description}</p>
-                  </div>
-                  {paginaAtual === 'home' ? (
-                    <span className="widget-arrow" aria-hidden="true">
-                      ↗
-                    </span>
-
-                  ) : widget.name === 'Notas rápidas' ? (
-                    <div className="quick-notes">
-                      <form
-                        onSubmit={(event) => {
-                          event.preventDefault();
-                          adicionarNota();
-                        }}
-                      >
-                        <textarea
-                          value={nota}
-                          onChange={(event) => setNota(event.target.value)}
-                          placeholder="Escreva uma ideia..."
-                          aria-label="Escreva uma nota"
-                          rows={3}
-                        />
-
-                        <button type="submit">Salvar nota +</button>
-                      </form>
-
-                      {notas.length > 0 && (
-                        <ul className="quick-notes-list">
-                          {notas.map((item, index) => (
-                            <li
-                              key={`${index}-${item}`}
-                              className="quick-note-item"
-                            >
-                              <span className="quick-note-text">{item}</span>
-
-                              <button
-                                type="button"
-                                className="quick-note-delete"
-                                onClick={() => solicitarExclusaoNota(index)}
-                                aria-label={`Excluir nota: ${item}`}
-                                title="Excluir nota"
-                              >
-                                <svg
-                                  viewBox="0 0 24 24"
-                                  aria-hidden="true"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="1.8"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                >
-                                  <path d="M3 6h18" />
-                                  <path d="M8 6V4h8v2" />
-                                  <path d="m19 6-1 14H6L5 6" />
-                                  <path d="M10 11v5M14 11v5" />
-                                </svg>
-                              </button>
-
-                              {notaParaExcluir === index && (
-                                <div className="quick-note-confirmation">
-                                  <span>Excluir esta nota?</span>
-
-                                  <div>
-                                    <button
-                                      type="button"
-                                      onClick={cancelarExclusaoNota}
-                                    >
-                                      Cancelar
-                                    </button>
-
-                                    <button
-                                      type="button"
-                                      onClick={confirmarExclusaoNota}
-                                    >
-                                      Excluir nota
-                                    </button>
-                                  </div>
-                                </div>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-
-                      {notas.length === 0 && (
-                        <p className="quick-notes-empty">
-                          Nenhuma nota por enquanto. Guarde sua primeira ideia!
-                        </p>
+            <div className="widget-grid">
+              {widgets
+                .filter(
+                  (widget) =>
+                    paginaAtual === 'home' ||
+                    paginaDoWidget[widget.name] === paginaAtual,
+                )
+                .map((widget) => (
+                  <article
+                    className={`widget-card ${paginaAtual === 'home' ? 'widget-card-compact' : 'widget-card-detail'}`}
+                    key={widget.number}
+                    onClick={() => {
+                      if (paginaAtual === 'home') {
+                        setPaginaAtual(paginaDoWidget[widget.name] ?? 'home');
+                      }
+                    }}
+                  >
+                    <div className="widget-icon" aria-hidden="true">
+                      {widget.name === 'Pomodoro' ? (
+                        <svg viewBox="0 0 24 24">
+                          <circle cx="12" cy="13" r="8" />
+                          <path d="M12 9v4l3 2M9 2h6M12 2v3M19 5l1.5 1.5" />
+                        </svg>
+                      ) : widget.name === 'Notas rápidas' ? (
+                        <svg viewBox="0 0 24 24">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                          <path d="M14 2v6h6M8 13h8M8 17h6" />
+                        </svg>
+                      ) : widget.name === 'Tasks' ? (
+                        <svg viewBox="0 0 24 24">
+                          <rect x="4" y="4" width="16" height="16" rx="3" />
+                          <path d="m8 12 3 3 5-6" />
+                        </svg>
+                      ) : (
+                        <svg viewBox="0 0 24 24">
+                          <path d="M10 13a5 5 0 0 0 7.1 0l3-3A5 5 0 0 0 13 2.9l-1.7 1.7" />
+                          <path d="M14 11a5 5 0 0 0-7.1 0l-3 3A5 5 0 0 0 11 21.1l1.7-1.7" />
+                        </svg>
                       )}
                     </div>
-                  ) : widget.name === 'Tasks' ? (
-                    <div className="task-list">
-                      <div className="task-progress">
-                        <div className="task-progress-header">
-                          <span>Seu progresso</span>
-                          <span>
-                            {tarefasConcluidas} de {tarefas.length} concluídas
-                          </span>
-                        </div>
-
-                        <div
-                          className="task-progress-track"
-                          role="progressbar"
-                          aria-label="Progresso das tarefas"
-                          aria-valuemin={0}
-                          aria-valuemax={100}
-                          aria-valuenow={progressoTarefas}
+                    <div>
+                      <h3>{widget.name}</h3>
+                      <p>{widget.description}</p>
+                    </div>
+                    {paginaAtual === 'home' ? (
+                      <span className="widget-arrow" aria-hidden="true">
+                        ↗
+                      </span>
+                    ) : widget.name === 'Notas rápidas' ? (
+                      <div className="quick-notes">
+                        <form
+                          onSubmit={(event) => {
+                            event.preventDefault();
+                            adicionarNota();
+                          }}
                         >
-                          <div
-                            className="task-progress-fill"
-                            style={{ width: `${progressoTarefas}%` }}
+                          <textarea
+                            value={nota}
+                            onChange={(event) => setNota(event.target.value)}
+                            placeholder="Escreva uma ideia..."
+                            aria-label="Escreva uma nota"
+                            rows={3}
                           />
-                        </div>
-                      </div>
 
-                      <form
-                        onSubmit={(event) => {
-                          event.preventDefault();
-                          adicionarTarefa();
-                        }}
-                      >
-                        <input
-                          value={novaTarefa}
-                          onChange={(event) =>
-                            setNovaTarefa(event.target.value)
-                          }
-                          placeholder="Adicionar tarefa..."
-                          aria-label="Nova tarefa"
-                        />
-                        <button type="submit">Adicionar +</button>
-                      </form>
+                          <button type="submit">Salvar nota +</button>
+                        </form>
 
-                      {tarefasOrganizadas.length > 0 && (
-                        <ul>
-                          {tarefasOrganizadas.map((tarefa) => (
-                            <li key={tarefa.id} className="task-item">
-                              <div className="task-item-main">
-                                <label>
-                                  <input
-                                    type="checkbox"
-                                    checked={tarefa.concluida}
-                                    onChange={() => alternarTarefa(tarefa.id)}
-                                  />
-                                  <span
-                                    className={
-                                      tarefa.concluida ? 'task-completed' : ''
-                                    }
-                                  >
-                                    {tarefa.texto}
-                                  </span>
-                                </label>
+                        {notas.length > 0 && (
+                          <ul className="quick-notes-list">
+                            {notas.map((item, index) => (
+                              <li
+                                key={`${index}-${item}`}
+                                className="quick-note-item"
+                              >
+                                <span className="quick-note-text">{item}</span>
 
                                 <button
                                   type="button"
-                                  className="task-delete-button"
-                                  onClick={() => solicitarExclusao(tarefa.id)}
-                                  aria-label={`Excluir tarefa: ${tarefa.texto}`}
-                                  title="Excluir tarefa"
+                                  className="quick-note-delete"
+                                  onClick={() => solicitarExclusaoNota(index)}
+                                  aria-label={`Excluir nota: ${item}`}
+                                  title="Excluir nota"
                                 >
                                   <svg
                                     viewBox="0 0 24 24"
@@ -562,115 +454,233 @@ function App() {
                                     <path d="M10 11v5M14 11v5" />
                                   </svg>
                                 </button>
-                              </div>
 
-                              {tarefaParaExcluir === tarefa.id && (
-                                <div className="task-delete-confirmation">
-                                  <span>Excluir esta tarefa?</span>
+                                {notaParaExcluir === index && (
+                                  <div className="quick-note-confirmation">
+                                    <span>Excluir esta nota?</span>
 
-                                  <div>
-                                    <button
-                                      type="button"
-                                      onClick={cancelarExclusao}
-                                    >
-                                      Cancelar
-                                    </button>
+                                    <div>
+                                      <button
+                                        type="button"
+                                        onClick={cancelarExclusaoNota}
+                                      >
+                                        Cancelar
+                                      </button>
 
-                                    <button
-                                      type="button"
-                                      onClick={confirmarExclusao}
-                                    >
-                                      Excluir tarefa
-                                    </button>
+                                      <button
+                                        type="button"
+                                        onClick={confirmarExclusaoNota}
+                                      >
+                                        Excluir nota
+                                      </button>
+                                    </div>
                                   </div>
-                                </div>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
 
-                      {tarefas.length === 0 && (
-                        <p className="task-empty">
-                          Nenhuma tarefa por enquanto. Adicione a primeira!
-                        </p>
-                      )}
-                    </div>
-                  ) : widget.name === 'Atalhos' ? (
-                    <div className="shortcuts-content">
-                      <form
-                        className="shortcut-form"
-                        onSubmit={(event) => {
-                          event.preventDefault();
-                          adicionarAtalho();
-                        }}
-                      >
-                        <input
-                          type="text"
-                          value={novoAtalhoNome}
-                          onChange={(event) =>
-                            setNovoAtalhoNome(event.target.value)
-                          }
-                          placeholder="Nome do atalho"
-                          aria-label="Nome do atalho"
-                          required
-                        />
+                        {notas.length === 0 && (
+                          <p className="quick-notes-empty">
+                            Nenhuma nota por enquanto. Guarde sua primeira
+                            ideia!
+                          </p>
+                        )}
+                      </div>
+                    ) : widget.name === 'Tasks' ? (
+                      <div className="task-list">
+                        <div className="task-progress">
+                          <div className="task-progress-header">
+                            <span>Seu progresso</span>
+                            <span>
+                              {tarefasConcluidas} de {tarefas.length} concluídas
+                            </span>
+                          </div>
 
-                        <input
-                          type="text"
-                          value={novoAtalhoUrl}
-                          onChange={(event) =>
-                            setNovoAtalhoUrl(event.target.value)
-                          }
-                          placeholder="exemplo.com"
-                          aria-label="Endereço do site"
-                          required
-                        />
-
-                        <button type="submit" className="shortcut-add">
-                          + Adicionar
-                        </button>
-                      </form>
-
-                      {atalhos.length === 0 ? (
-                        <p className="shortcut-empty">
-                          Seus sites favoritos aparecerão aqui.
-                        </p>
-                      ) : (
-                        <div className="shortcut-list">
-                          {atalhos.map((atalho) => (
-                            <div className="shortcut-item" key={atalho.id}>
-                              <a
-                                className="shortcut-link"
-                                href={atalho.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title={`Abrir ${atalho.nome}`}
-                              >
-                                <ShortcutIcon url={atalho.url} />
-                                <span>{atalho.nome}</span>
-                              </a>
-
-                              <button
-                                type="button"
-                                className="shortcut-delete"
-                                onClick={() => excluirAtalho(atalho.id)}
-                                aria-label={`Excluir ${atalho.nome}`}
-                                title="Excluir atalho"
-                              >
-                                ×
-                              </button>
-                            </div>
-                          ))}
+                          <div
+                            className="task-progress-track"
+                            role="progressbar"
+                            aria-label="Progresso das tarefas"
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                            aria-valuenow={progressoTarefas}
+                          >
+                            <div
+                              className="task-progress-fill"
+                              style={{ width: `${progressoTarefas}%` }}
+                            />
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  ) : null}
-                </article>
-              ))}
-          </div>
-        </section>
-         )}
+
+                        <form
+                          onSubmit={(event) => {
+                            event.preventDefault();
+                            adicionarTarefa();
+                          }}
+                        >
+                          <input
+                            value={novaTarefa}
+                            onChange={(event) =>
+                              setNovaTarefa(event.target.value)
+                            }
+                            placeholder="Adicionar tarefa..."
+                            aria-label="Nova tarefa"
+                          />
+                          <button type="submit">Adicionar +</button>
+                        </form>
+
+                        {tarefasOrganizadas.length > 0 && (
+                          <ul>
+                            {tarefasOrganizadas.map((tarefa) => (
+                              <li key={tarefa.id} className="task-item">
+                                <div className="task-item-main">
+                                  <label>
+                                    <input
+                                      type="checkbox"
+                                      checked={tarefa.concluida}
+                                      onChange={() => alternarTarefa(tarefa.id)}
+                                    />
+                                    <span
+                                      className={
+                                        tarefa.concluida ? 'task-completed' : ''
+                                      }
+                                    >
+                                      {tarefa.texto}
+                                    </span>
+                                  </label>
+
+                                  <button
+                                    type="button"
+                                    className="task-delete-button"
+                                    onClick={() => solicitarExclusao(tarefa.id)}
+                                    aria-label={`Excluir tarefa: ${tarefa.texto}`}
+                                    title="Excluir tarefa"
+                                  >
+                                    <svg
+                                      viewBox="0 0 24 24"
+                                      aria-hidden="true"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="1.8"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    >
+                                      <path d="M3 6h18" />
+                                      <path d="M8 6V4h8v2" />
+                                      <path d="m19 6-1 14H6L5 6" />
+                                      <path d="M10 11v5M14 11v5" />
+                                    </svg>
+                                  </button>
+                                </div>
+
+                                {tarefaParaExcluir === tarefa.id && (
+                                  <div className="task-delete-confirmation">
+                                    <span>Excluir esta tarefa?</span>
+
+                                    <div>
+                                      <button
+                                        type="button"
+                                        onClick={cancelarExclusao}
+                                      >
+                                        Cancelar
+                                      </button>
+
+                                      <button
+                                        type="button"
+                                        onClick={confirmarExclusao}
+                                      >
+                                        Excluir tarefa
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+
+                        {tarefas.length === 0 && (
+                          <p className="task-empty">
+                            Nenhuma tarefa por enquanto. Adicione a primeira!
+                          </p>
+                        )}
+                      </div>
+                    ) : widget.name === 'Atalhos' ? (
+                      <div className="shortcuts-content">
+                        <form
+                          className="shortcut-form"
+                          onSubmit={(event) => {
+                            event.preventDefault();
+                            adicionarAtalho();
+                          }}
+                        >
+                          <input
+                            type="text"
+                            value={novoAtalhoNome}
+                            onChange={(event) =>
+                              setNovoAtalhoNome(event.target.value)
+                            }
+                            placeholder="Nome do atalho"
+                            aria-label="Nome do atalho"
+                            required
+                          />
+
+                          <input
+                            type="text"
+                            value={novoAtalhoUrl}
+                            onChange={(event) =>
+                              setNovoAtalhoUrl(event.target.value)
+                            }
+                            placeholder="exemplo.com"
+                            aria-label="Endereço do site"
+                            required
+                          />
+
+                          <button type="submit" className="shortcut-add">
+                            + Adicionar
+                          </button>
+                        </form>
+
+                        {atalhos.length === 0 ? (
+                          <p className="shortcut-empty">
+                            Seus sites favoritos aparecerão aqui.
+                          </p>
+                        ) : (
+                          <div className="shortcut-list">
+                            {atalhos.map((atalho) => (
+                              <div className="shortcut-item" key={atalho.id}>
+                                <a
+                                  className="shortcut-link"
+                                  href={atalho.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title={`Abrir ${atalho.nome}`}
+                                >
+                                  <ShortcutIcon url={atalho.url} />
+                                  <span>{atalho.nome}</span>
+                                </a>
+
+                                <button
+                                  type="button"
+                                  className="shortcut-delete"
+                                  onClick={() => excluirAtalho(atalho.id)}
+                                  aria-label={`Excluir ${atalho.nome}`}
+                                  title="Excluir atalho"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ) : null}
+                  </article>
+                ))}
+            </div>
+          </section>
+        )}
         {paginaAtual === 'home' && (
           <footer className="workspace-footer">
             <span>NOOK — Fase inicial,</span>
